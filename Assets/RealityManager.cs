@@ -3,64 +3,77 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
+public enum RealityType
+{
+    Spirit,
+    Living,
+}
+
 public class RealityManager : MonoBehaviour
 {
+    public static RealityManager Instance;
+
     [Header("Reality Settings")]
     public int currentReality = 0;
     public List<Reality> realities = new List<Reality>();
-    
+
     [Header("Input")]
     public InputActionAsset inputActions;
     private InputAction switchRealityAction;
-    
+
     [Header("Visual Settings")]
     public float inactiveOpacity = 0.2f;
     public float transitionSpeed = 2f;
-    
+
     [Header("Audio (Optional)")]
     public AudioClip switchSound;
     private AudioSource audioSource;
-    
+    public RealityType currentRealityType;
+
     void Awake()
     {
+        if (Instance == null)
+        {
+            Instance = this;
+        }
         audioSource = GetComponent<AudioSource>();
-        
+
         // Set up input actions
         if (inputActions != null)
         {
             switchRealityAction = inputActions.FindAction("SwitchReality");
         }
     }
-    
+
     void OnEnable()
     {
         if (inputActions != null)
         {
             inputActions.Enable();
-            
+
             if (switchRealityAction != null)
                 switchRealityAction.performed += OnSwitchReality;
         }
     }
-    
+
     void OnDisable()
     {
         if (inputActions != null)
         {
             inputActions.Disable();
-            
+
             if (switchRealityAction != null)
                 switchRealityAction.performed -= OnSwitchReality;
         }
     }
-    
+
     void Start()
     {
         // Initialize all realities
         InitializeRealities();
-        
+
         // Set the starting reality
-        SwitchToReality(1);
+        SwitchToReality((int)RealityType.Living);
     }
 
     void InitializeRealities()
@@ -74,18 +87,18 @@ public class RealityManager : MonoBehaviour
         }
         currentReality = -1;
     }
-    
+
     void OnSwitchReality(InputAction.CallbackContext context)
     {
         SwitchToNextReality();
     }
-    
+
     public void SwitchToNextReality()
     {
         int nextReality = (currentReality + 1) % realities.Count;
         SwitchToReality(nextReality);
     }
-    
+
     public void SwitchToReality(int realityIndex)
     {
         if (realityIndex >= realities.Count)
@@ -93,40 +106,41 @@ public class RealityManager : MonoBehaviour
             Debug.LogWarning($"Reality index {realityIndex} is out of range!");
             return;
         }
-        
+
         if (realityIndex == currentReality) return;
-        
+
         currentReality = realityIndex;
-        
+        currentRealityType = (RealityType)realityIndex;
+
         // Update all realities
         for (int i = 0; i < realities.Count; i++)
         {
             bool isActive = (i == currentReality);
             realities[i].SetActive(isActive, inactiveOpacity, transitionSpeed);
         }
-        
+
         // Play sound effect
         if (switchSound != null && audioSource != null)
         {
             audioSource.PlayOneShot(switchSound);
         }
-        
+
         Debug.Log($"Switched to Reality {currentReality}");
     }
-    
+
     // Method to add objects to a reality at runtime
     public void AddObjectToReality(int realityIndex, GameObject obj)
     {
         if (realityIndex >= 0 && realityIndex < realities.Count)
         {
             realities[realityIndex].AddObject(obj);
-            
+
             // Update the object's state based on current reality
             bool isActive = (realityIndex == currentReality);
             realities[realityIndex].SetObjectState(obj, isActive, inactiveOpacity);
         }
     }
-    
+
     // Method to remove objects from a reality at runtime
     public void RemoveObjectFromReality(int realityIndex, GameObject obj)
     {

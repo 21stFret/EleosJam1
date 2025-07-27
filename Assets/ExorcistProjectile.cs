@@ -8,6 +8,7 @@ public class ExorcistProjectile : MonoBehaviour
     public float lifetime = 5f;
     public bool piercing = false;
     public int maxHits = 1;
+    public float knockbackForce = 30f;
     
     [Header("Visual Effects")]
     public GameObject hitEffectPrefab;
@@ -142,7 +143,7 @@ public class ExorcistProjectile : MonoBehaviour
         if (targetRb != null)
         {
             Vector2 knockbackDirection = direction;
-            targetRb.AddForce(knockbackDirection * 300f, ForceMode2D.Impulse);
+            targetRb.AddForce(knockbackDirection * knockbackForce, ForceMode2D.Impulse);
         }
         
         // Play hit sound
