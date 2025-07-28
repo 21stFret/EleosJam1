@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.InputSystem;
+using UnityEngine.SceneManagement;
 
 public class GameManager : MonoBehaviour
 {
@@ -47,12 +48,6 @@ public class GameManager : MonoBehaviour
         if (Instance == null)
         {
             Instance = this;
-            DontDestroyOnLoad(gameObject);
-        }
-        else
-        {
-            Destroy(gameObject);
-            return;
         }
 
         gameUI = GetComponent<GameUI>();
@@ -108,6 +103,7 @@ public class GameManager : MonoBehaviour
         Debug.Log("Game Started!");
         OnGameStart?.Invoke();
         _exorcistCombat = FindFirstObjectByType<ExorcistCombat>();
+        Time.timeScale = 1f; // Ensure game is running at normal speed
         if (playerInput != null)
         {
             playerInput.ActivateInput();
@@ -218,33 +214,7 @@ public class GameManager : MonoBehaviour
 
     public void ResetGame()
     {
-        // Destroy all active enemies
-        foreach (EnemyBaseClass enemy in activeEnemies)
-        {
-            if (enemy != null)
-            {
-                Destroy(enemy.gameObject);
-            }
-        }
-
-        // Clear lists and reset counters
-        activeEnemies.Clear();
-        allSpawnedEnemies.Clear();
-        totalEnemiesSpawned = 0;
-        totalEnemiesKilled = 0;
-
-        // Reset game state
-        gameStarted = false;
-        gameWon = false;
-        gamePaused = false;
-
-        enemyWavetimer = 0f;
-
-        Time.timeScale = 1f; // Resume time
-
-        Debug.Log("Game Reset!");
-
-        OnGameStart?.Invoke();
+        SceneManager.LoadScene(SceneManager.GetActiveScene().name);
     }
 
     public void QuitGame()
