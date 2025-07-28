@@ -26,13 +26,21 @@ public class EnemyBaseClass : MonoBehaviour, IDamageable
     protected virtual void Die()
     {
         isAlive = false;
-        gameObject.SetActive(false);
+        
         if (deathEffect != null)
         {
             deathEffect.transform.position = transform.position;
             deathEffect.transform.parent = null; // Detach from parent to avoid being destroyed
             deathEffect.Play();
         }
+
+        // Notify GameManager if it exists
+        if (GameManager.Instance != null)
+        {
+            GameManager.Instance.MonitorEnemy(this);
+        }
+        
+        gameObject.SetActive(false);
     }
 
     public virtual void Update()

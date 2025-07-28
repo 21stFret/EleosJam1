@@ -5,7 +5,6 @@ using UnityEngine;
 public class WispController : EnemyBaseClass
 {
     public float chaseDistance = 5f;
-    public float attackDistance = 1f;
     private float realmSpeed = 2f;
 
     private Transform playerTransform;
@@ -16,8 +15,9 @@ public class WispController : EnemyBaseClass
         realmSpeed = speed * 2;
     }
 
-    void Update()
+    public override void Update()
     {
+        base.Update();
         if (Vector3.Distance(transform.position, playerTransform.position) < chaseDistance)
         {
             ChasePlayer();
@@ -30,7 +30,7 @@ public class WispController : EnemyBaseClass
         Vector3 direction = (playerTransform.position - transform.position).normalized;
         transform.position += direction * speed * Time.deltaTime;
 
-        if (Vector3.Distance(transform.position, playerTransform.position) < attackDistance)
+        if (Vector3.Distance(transform.position, playerTransform.position) < attackRange)
         {
             if (canAttack)
             {
@@ -45,5 +45,9 @@ public class WispController : EnemyBaseClass
     {
         // Implement attack logic here
         Debug.Log("Attacking Player!");
+        if (playerTransform.TryGetComponent<IDamageable>(out IDamageable damageable))
+        {
+            damageable.TakeDamage(damage);
+        }
     }
 }

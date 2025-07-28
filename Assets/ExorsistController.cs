@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
-public class ExorsistController : MonoBehaviour
+public class ExorsistController : MonoBehaviour, IDamageable
 {
     [Header("Movement Settings")]
     public float moveSpeed = 5f;
@@ -25,8 +25,13 @@ public class ExorsistController : MonoBehaviour
     public float wallCheckDistance = 0.6f;
     public float wallSlideSpeed = 2f;
     public int wallCheckRayCount = 3;
-    public float wallCheckHeight = 1f;
-    
+    public float wallCheckHeight;
+
+    [Header("Health Settings")]
+    public float maxHealth = 100f;
+    public float currentHealth = 100f;
+    public bool isAlive = true;
+
     // Components
     private Rigidbody2D rb;
     private Collider2D playerCollider;
@@ -52,7 +57,9 @@ public class ExorsistController : MonoBehaviour
     {
         rb = GetComponent<Rigidbody2D>();
         playerCollider = GetComponent<Collider2D>();
-        
+
+        inputActions = GameManager.Instance?.playerInput.actions;
+
         // Set up input actions
         if (inputActions != null)
         {
@@ -193,12 +200,12 @@ public class ExorsistController : MonoBehaviour
     void HandleMovement()
     {
         // Horizontal movement
-        rb.velocity = new Vector2(horizontalInput * moveSpeed, rb.velocity.y);
+        rb.linearVelocity = new Vector2(horizontalInput * moveSpeed, rb.linearVelocity.y);
         
         // Wall slide prevention - limit falling speed when wall sliding
         if (isWallSliding)
         {
-            rb.velocity = new Vector2(0, Mathf.Max(rb.velocity.y, -wallSlideSpeed));
+            rb.linearVelocity = new Vector2(0, Mathf.Max(rb.linearVelocity.y, -wallSlideSpeed));
         }
         
         // Flip character sprite based on movement direction
@@ -237,7 +244,7 @@ public class ExorsistController : MonoBehaviour
 
     void PerformJump()
     {
-        rb.velocity = new Vector2(rb.velocity.x, jumpForce);
+        rb.linearVelocity = new Vector2(rb.linearVelocity.x, jumpForce);
         coyoteTimeCounter = 0f;
         jumpBufferCounter = 0f;
         isJumpingDown = false;
@@ -261,7 +268,7 @@ public class ExorsistController : MonoBehaviour
         }
         
         // Add slight downward force
-        rb.velocity = new Vector2(rb.velocity.x, -2f);
+        rb.linearVelocity = new Vector2(rb.linearVelocity.x, -2f);
         
         // Wait for the specified duration
         yield return new WaitForSeconds(jumpDownDuration);
@@ -308,6 +315,29 @@ public class ExorsistController : MonoBehaviour
             }
         }
         verticalJumpTriggered = false;
+    }
+
+    public void TakeDamage(float amount)
+    {
+        // Implement damage logic here
+        Debug.Log($"Exorsist took {amount} damage!");
+        currentHealth -= amount;
+        if (currentHealth < 0)
+            currentHealth = 0;
+        GameManager.Instance?.gameUI.UpdateHealthBar(currentHealth / maxHealth);
+        if (currentHealth == 0)
+        {
+            Die();
+        }
+    }
+
+    public void Die()
+    {
+        isAlive = false;
+        Debug.Log("Exorsist died!");
+        GameManager.Instance?.OnGameWin?.Invoke();
+        GameManager.Instance?.EndGame();
+
     }
 
     void OnDrawGizmosSelected()

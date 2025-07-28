@@ -54,7 +54,7 @@ public class ExorcistCombat : MonoBehaviour
     private Queue<GameObject> projectilePool = new Queue<GameObject>();
     private Transform projectilePoolParent;
     
-    void Awake()
+    public void Init()
     {
         // Get components
         realityManager = FindObjectOfType<RealityManager>();
@@ -66,11 +66,14 @@ public class ExorcistCombat : MonoBehaviour
         {
             audioSource = gameObject.AddComponent<AudioSource>();
         }
-        
+
         // Set up input actions
+        inputActions = GameManager.Instance?.playerInput.actions;
         if (inputActions != null)
         {
             attackAction = inputActions.FindAction("Attack");
+            if (attackAction != null)
+            attackAction.performed += OnAttack;
         }
         
         // Create fire point if it doesn't exist
@@ -232,10 +235,7 @@ public class ExorcistCombat : MonoBehaviour
     void UpdateMeleeHitboxPosition()
     {
         if (meleeHitbox == null) return;
-        
-        //Vector2 attackDirection = transform.localScale.x > 0 ? Vector2.right : Vector2.left;
-        //meleeHitbox.transform.localPosition = attackDirection * (meleeRange * 0.5f);
-        
+
         // Update collider size in case settings changed
         if (meleeCollider != null)
         {

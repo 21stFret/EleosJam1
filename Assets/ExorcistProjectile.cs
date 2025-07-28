@@ -96,7 +96,7 @@ public class ExorcistProjectile : MonoBehaviour
         // Set velocity
         if (rb != null)
         {
-            rb.velocity = direction * speed;
+            rb.linearVelocity = direction * speed;
         }
         
         // Rotate projectile to face direction
@@ -190,7 +190,7 @@ public class ExorcistProjectile : MonoBehaviour
         // Stop all movement and effects
         if (rb != null)
         {
-            rb.velocity = Vector2.zero;
+            rb.linearVelocity = Vector2.zero;
         }
         
         // Disable trail if it exists
