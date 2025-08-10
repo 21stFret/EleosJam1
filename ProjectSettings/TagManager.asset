@@ -3,7 +3,8 @@
 --- !u!78 &1
 TagManager:
   serializedVersion: 3
-  tags: []
+  tags:
+  - Enemy
   layers:
   - Default
   - TransparentFX
@@ -15,9 +16,9 @@ TagManager:
   - LivingRealm
   - DeathRealm
   - Ghost
-  - 
-  - 
-  - 
+  - MiniMap
+  - Prop
+  - PropOnly
   - 
   - 
   - 
@@ -38,8 +39,14 @@ TagManager:
   - 
   - 
   m_SortingLayers:
+  - name: BG
+    uniqueID: 1073682307
+    locked: 0
   - name: Default
     uniqueID: 0
+    locked: 0
+  - name: InLight
+    uniqueID: 1899394407
     locked: 0
   m_RenderingLayers:
   - Default
