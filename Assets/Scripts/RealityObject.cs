@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Tilemaps;
 
 public class RealityObject : MonoBehaviour
 {
@@ -12,9 +13,11 @@ public class RealityObject : MonoBehaviour
     private SpriteRenderer[] spriteRenderers;
     private Collider2D[] colliders;
     private MonoBehaviour[] behaviors;
+    private Tilemap[] tilemaps;
+
     
     // Original values
-    private Color[] originalColors;
+    public Color originalColor;
     private bool[] originalColliderStates;
     private bool[] originalBehaviorStates;
     
@@ -26,17 +29,9 @@ public class RealityObject : MonoBehaviour
     {
         CacheComponents();
     }
-    
+
     void CacheComponents()
     {
-        // Get all sprite renderers (including children)
-        spriteRenderers = GetComponentsInChildren<SpriteRenderer>();
-        originalColors = new Color[spriteRenderers.Length];
-        for (int i = 0; i < spriteRenderers.Length; i++)
-        {
-            originalColors[i] = spriteRenderers[i].color;
-        }
-        
         // Get all colliders
         colliders = GetComponentsInChildren<Collider2D>();
         originalColliderStates = new bool[colliders.Length];
@@ -44,7 +39,10 @@ public class RealityObject : MonoBehaviour
         {
             originalColliderStates[i] = colliders[i].enabled;
         }
-        
+
+        // Get all Tilemaps (including children)
+        tilemaps = GetComponentsInChildren<Tilemap>();
+
         /*
         // Get all behaviors (scripts that might need to be disabled)
         behaviors = GetComponentsInChildren<MonoBehaviour>();
@@ -86,8 +84,8 @@ public class RealityObject : MonoBehaviour
     private IEnumerator TransitionToState(bool active, float inactiveOpacity, float transitionSpeed)
     {
         float targetAlpha = active ? 1f : inactiveOpacity;
-        float currentAlpha = spriteRenderers.Length > 0 ? spriteRenderers[0].color.a : 1f;
-        
+        float currentAlpha = tilemaps.Length > 0 ? tilemaps[0].color.a : 1f;
+
         // Handle colliders and behaviors immediately
         SetCollidersState(active);
         if (disableWhenInactive)
@@ -118,13 +116,13 @@ public class RealityObject : MonoBehaviour
     
     private void SetSpriteAlpha(float alpha)
     {
-        for (int i = 0; i < spriteRenderers.Length; i++)
+        for (int i = 0; i < tilemaps.Length; i++)
         {
-            if (spriteRenderers[i] != null)
+            if (tilemaps[i] != null)
             {
-                Color color = originalColors[i];
+                Color color = originalColor;
                 color.a = alpha;
-                spriteRenderers[i].color = color;
+                tilemaps[i].color = color;
             }
         }
     }

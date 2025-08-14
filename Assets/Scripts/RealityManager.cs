@@ -189,6 +189,7 @@ public class Reality
                     realityObj = obj.AddComponent<RealityObject>();
                 }
                 allRealityObjects.Add(realityObj);
+                realityObj.originalColor = realityColor; // Set the original color for the object
             }
         }
     }
