@@ -26,7 +26,7 @@ public class FollowCamera : MonoBehaviour
         // If no target is assigned, try to find the player
         if (target == null)
         {
-            ExorcistController player = FindObjectOfType<ExorcistController>();
+            ExorcistController player = FindFirstObjectByType<ExorcistController>();
             if (player != null)
             {
                 target = player.transform;

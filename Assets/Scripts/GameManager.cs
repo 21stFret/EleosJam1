@@ -50,7 +50,7 @@ public class GameManager : MonoBehaviour
         {
             Instance = this;
         }
-
+        
         gameUI = GetComponent<GameUI>();
     }
 
@@ -103,8 +103,6 @@ public class GameManager : MonoBehaviour
 
     public void StartGame()
     {
-        if (gameStarted) return;
-
         gameStarted = true;
         gameWon = false;
         gamePaused = false;

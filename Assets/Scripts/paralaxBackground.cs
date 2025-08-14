@@ -202,39 +202,4 @@ public class paralaxBackground : MonoBehaviour
         lastCameraPosition = cameraTransform.position;
     }
     
-    // Context menu for editor testing
-    [ContextMenu("Reset All Layers")]
-    void ResetAllLayersMenu()
-    {
-        ResetAllLayers();
-    }
-    
-    [ContextMenu("Reinitialize Layers")]
-    void ReinitializeLayers()
-    {
-        InitializeLayers();
-    }
-    
-    void OnDrawGizmosSelected()
-    {
-        // Draw parallax layer boundaries in editor
-        if (parallaxLayers != null)
-        {
-            for (int i = 0; i < parallaxLayers.Length; i++)
-            {
-                if (parallaxLayers[i].spriteRenderer != null)
-                {
-                    Gizmos.color = Color.Lerp(Color.red, Color.blue, (float)i / parallaxLayers.Length);
-                    Gizmos.DrawWireCube(
-                        parallaxLayers[i].spriteRenderer.bounds.center,
-                        parallaxLayers[i].spriteRenderer.bounds.size
-                    );
-                    
-                    // Draw layer number
-                    Vector3 labelPosition = parallaxLayers[i].spriteRenderer.bounds.center + Vector3.up * 0.5f;
-                    UnityEditor.Handles.Label(labelPosition, $"Layer {i}\nSpeed: {parallaxLayers[i].parallaxSpeed:F2}");
-                }
-            }
-        }
-    }
 }

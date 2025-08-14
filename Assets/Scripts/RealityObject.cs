@@ -10,16 +10,13 @@ public class RealityObject : MonoBehaviour
     public bool disableCollidersWhenInactive = true;
     
     // Component references
-    private SpriteRenderer[] spriteRenderers;
     private Collider2D[] colliders;
-    private MonoBehaviour[] behaviors;
     private Tilemap[] tilemaps;
 
     
     // Original values
     public Color originalColor;
     private bool[] originalColliderStates;
-    private bool[] originalBehaviorStates;
     
     // Current state
     private bool isActive = true;
@@ -136,23 +133,6 @@ public class RealityObject : MonoBehaviour
             if (colliders[i] != null)
             {
                 colliders[i].enabled = active ? originalColliderStates[i] : false;
-            }
-        }
-    }
-    
-    private void SetBehaviorsState(bool active)
-    {
-        for (int i = 0; i < behaviors.Length; i++)
-        {
-            if (behaviors[i] != null && behaviors[i] != this)
-            {
-                // Don't disable essential Unity components
-                if (!(behaviors[i] is Transform) && 
-                    !(behaviors[i] is SpriteRenderer) && 
-                    !(behaviors[i] is Collider2D))
-                {
-                    behaviors[i].enabled = active ? originalBehaviorStates[i] : false;
-                }
             }
         }
     }
