@@ -296,7 +296,7 @@ public class ExorcistController : MonoBehaviour, IDamageable
         }
     }
 
-    public void TakeDamage(float amount, float stunTime = 0f)
+    public void TakeDamage(float amount, float stunTime = 0f, float knockbackForce = 0f)
     {
         // Implement damage logic here
         Debug.Log($"Exorsist took {amount} damage!");

@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using UnityEngine.Rendering.Universal;
 
 public enum RealityType
 {
@@ -29,6 +30,9 @@ public class RealityManager : MonoBehaviour
     public AudioClip switchSound;
     private AudioSource audioSource;
     public RealityType currentRealityType;
+
+    public Light2D light2DLiving;
+    public Light2D light2DSpirit;
 
     void Awake()
     {
@@ -125,6 +129,9 @@ public class RealityManager : MonoBehaviour
             audioSource.PlayOneShot(switchSound);
         }
 
+        light2DLiving.enabled = (currentRealityType == RealityType.Living);
+        light2DSpirit.enabled = (currentRealityType == RealityType.Spirit);
+
         Debug.Log($"Switched to Reality {currentReality}");
     }
 
@@ -158,7 +165,7 @@ public class Reality
     public string realityName = "Reality";
     public Color realityColor = Color.white;
     public LayerMask realityLayerMask;
-    
+
     [Header("Objects")]
     public List<GameObject> staticObjects = new List<GameObject>();
     public List<GameObject> activeObjects = new List<GameObject>();
@@ -167,11 +174,12 @@ public class Reality
     // Runtime collections
     private List<RealityObject> allRealityObjects = new List<RealityObject>();
     
+    
     public void Initialize()
     {
         // Clear existing reality objects
         allRealityObjects.Clear();
-        
+
         // Add all objects to the reality object list
         AddObjectsToList(staticObjects);
         AddObjectsToList(activeObjects);
@@ -187,11 +195,11 @@ public class Reality
                 RealityObject realityObj = obj.GetComponent<RealityObject>();
                 if (realityObj == null)
                 {
-                    realityObj = obj.AddComponent<RealityObject>();
+                    continue;
                 }
                 allRealityObjects.Add(realityObj);
                 realityObj.originalColor = realityColor; // Set the original color for the object
-                
+
                 // Convert LayerMask to layer index - get the first set bit
                 int layerIndex = 0;
                 int maskValue = realityLayerMask.value;
@@ -201,8 +209,8 @@ public class Reality
                     layerIndex++;
                 }
                 realityObj.gameObject.layer = layerIndex; // Set the layer for the object
-                
-                Debug.Log($"Object {obj.name} added to Reality {realityName}");
+
+                //Debug.Log($"Object {obj.name} added to Reality {realityName}");
                 if (realityObj.minimap != null)
                 {
                     realityObj.minimap.color = realityColor; // Set minimap color
@@ -210,6 +218,14 @@ public class Reality
                 else
                 {
                     //Debug.LogWarning($"Object {obj.name} does not have a RealityObject minimap component!");
+                }
+                if(realityObj.tilemapRenderer != null)
+                {
+                    realityObj.tilemapRenderer.sortingLayerName = realityName; // Set tilemap sorting layer
+                }
+                else
+                {
+                    //Debug.LogWarning($"Object {obj.name} does not have a RealityObject tilemapRenderer component!");
                 }
             }
         }

@@ -14,9 +14,26 @@ public class EnemyBaseClass : MonoBehaviour, IDamageable
     public bool canAttack = true;
     public ParticleSystem deathEffect;
     public RealityType realityType;
+    private ExorcistController playerController;
+    protected bool isStunned = false;
+    private bool isImmune = false;
 
-    public void TakeDamage(float amount, float stunTime = 0f)
+    public void StartingImmunity()
     {
+        isImmune = true;
+        StartCoroutine(RemoveImmunity());
+    }
+
+    private IEnumerator RemoveImmunity()
+    {
+        yield return new WaitForSeconds(0.5f);
+        isImmune = false;
+    }
+
+    public void TakeDamage(float amount, float stunTime = 0f, float knockbackForce = 0f)
+    {
+        if (isImmune) return;
+
         health -= amount;
         if (health <= 0)
         {
@@ -26,16 +43,29 @@ public class EnemyBaseClass : MonoBehaviour, IDamageable
         {
             StartCoroutine(StunCoroutine(stunTime));
         }
+        if (knockbackForce > 0f)
+        {
+            // Apply knockback force
+            Rigidbody2D rb = GetComponent<Rigidbody2D>();
+            if (rb != null)
+            {
+                if (playerController == null)
+                {
+                    playerController = GameObject.FindGameObjectWithTag("Player").GetComponent<ExorcistController>();
+                }
+                Vector2 knockbackDirection = (transform.position - playerController.transform.position).normalized;
+                rb.AddForce(knockbackDirection * knockbackForce, ForceMode2D.Impulse);
+            }
+        }
     }
 
     private IEnumerator StunCoroutine(float duration)
     {
         canAttack = false;
-        float originalSpeed = speed;
-        speed = 0f; // Stop movement during stun
+        isStunned = true;
         yield return new WaitForSeconds(duration);
-        speed = originalSpeed; // Restore movement speed after stun
         canAttack = true;
+        isStunned = false;
     }
 
     public virtual void Die()

@@ -22,6 +22,7 @@ public class MovingPlatform : MonoBehaviour
     
     // Passenger tracking
     private List<Transform> passengers = new List<Transform>();
+    private RealityObject realityObject;
 
     // Start is called before the first frame update
     void Start()
@@ -30,6 +31,7 @@ public class MovingPlatform : MonoBehaviour
         startPoint.SetParent(null); // Ensure startPoint is not a child of this object
         targetPosition = endPoint.position;
         lastPosition = transform.position;
+        realityObject = GetComponent<RealityObject>();
     }
 
     // Update is called once per frame
@@ -70,6 +72,11 @@ public class MovingPlatform : MonoBehaviour
     
     void MovePassengers()
     {
+        if (!realityObject.isActive)
+        {
+            // If reality object is inactive, do not move passengers
+            return;
+        }
         Vector3 deltaMovement = transform.position - lastPosition;
         
         // Update passenger list

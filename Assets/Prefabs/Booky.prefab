@@ -365,7 +365,7 @@ GameObject:
   - component: {fileID: 3814770012375561347}
   - component: {fileID: 7041652695202839713}
   - component: {fileID: 6608514285453827683}
-  m_Layer: 0
+  m_Layer: 13
   m_Name: Booky
   m_TagString: Enemy
   m_Icon: {fileID: 0}
@@ -402,7 +402,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   health: 3
-  speed: 2
+  speed: 3
   isAlive: 1
   attackCooldown: 1
   attackRange: 1.5
@@ -410,14 +410,18 @@ MonoBehaviour:
   canAttack: 1
   deathEffect: {fileID: 0}
   realityType: 1
-  edgeRayDistance: 2
-  jumpForce: 8
+  edgeRayDistance: 1.1
+  jumpForce: 10
   platformLayer:
     serializedVersion: 2
-    m_Bits: 384
-  platformSearchRadius: 5.65
-  jumpCooldown: 3
+    m_Bits: 392
+  wallLayer:
+    serializedVersion: 2
+    m_Bits: 64
+  platformSearchRadius: 8
+  jumpCooldown: 2
   jumpHeight: 2
+  movingRight: 1
 --- !u!50 &7041652695202839713
 Rigidbody2D:
   serializedVersion: 5
@@ -431,7 +435,7 @@ Rigidbody2D:
   m_UseFullKinematicContacts: 0
   m_UseAutoMass: 0
   m_Mass: 1
-  m_LinearDamping: 0
+  m_LinearDamping: 0.7
   m_AngularDamping: 0.05
   m_GravityScale: 1
   m_Material: {fileID: 0}

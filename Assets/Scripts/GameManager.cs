@@ -191,7 +191,7 @@ public class GameManager : MonoBehaviour
         {
             activeEnemies.Add(enemy);
             allSpawnedEnemies.Add(enemy);
-
+            enemy.StartingImmunity();
         }
     }
 
@@ -364,5 +364,6 @@ public enum EnemyType
     Wisp,
     Booky,
     Sulker,
+    Sharpy
 
 }

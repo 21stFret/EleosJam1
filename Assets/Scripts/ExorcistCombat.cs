@@ -25,7 +25,13 @@ public class ExorcistCombat : MonoBehaviour
     public float projectileDamage = 30f;
     public int projectilePoolSize = 10;
     public float projectileAmount = 1f;
-    
+
+    [Header("Explosion Settings")]
+    public float explosionRadius = 5f;
+    public float explosionPercentage = 0.5f;
+    public bool isExplosive = false;
+
+
     [Header("Visual Effects")]
     public GameObject meleeEffectPrefab;
     public GameObject muzzleFlashPrefab;
@@ -343,5 +349,5 @@ public class ExorcistCombat : MonoBehaviour
 // Interface for objects that can take damage
 public interface IDamageable
 {
-    void TakeDamage(float damage, float stunTime = 0f);
+    void TakeDamage(float damage, float stunTime = 0f, float knockbackForce = 0f);
 }

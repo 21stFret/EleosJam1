@@ -42,16 +42,9 @@ public class MeleeHitbox : MonoBehaviour
             IDamageable damageable = other.GetComponent<IDamageable>();
             if (damageable != null)
             {
-                damageable.TakeDamage(damage);
+                damageable.TakeDamage(damage, stunTime, knockbackForce);
             }
-            
-            // Add knockback if enemy has rigidbody
-            Rigidbody2D enemyRb = other.GetComponent<Rigidbody2D>();
-            if (enemyRb != null && combatController != null)
-            {
-                Vector2 knockbackDirection = (other.transform.position - combatController.transform.position).normalized;
-                enemyRb.AddForce(knockbackDirection * knockbackForce, ForceMode2D.Impulse);
-            }
+        
         }
     }
     

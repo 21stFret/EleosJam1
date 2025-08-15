@@ -11,7 +11,8 @@ public class RealityObject : MonoBehaviour
     
     // Component references
     private Collider2D[] colliders;
-    private Tilemap[] tilemaps;
+    private Tilemap tilemap;
+    public TilemapRenderer tilemapRenderer;
 
     public SpriteRenderer minimap;
 
@@ -21,7 +22,7 @@ public class RealityObject : MonoBehaviour
     private bool[] originalColliderStates;
     
     // Current state
-    private bool isActive = true;
+    public bool isActive = true;
     private Coroutine transitionCoroutine;
     
     void Awake()
@@ -40,7 +41,8 @@ public class RealityObject : MonoBehaviour
         }
 
         // Get all Tilemaps (including children)
-        tilemaps = GetComponentsInChildren<Tilemap>();
+        tilemap = GetComponentInChildren<Tilemap>();
+        tilemapRenderer = GetComponentInChildren<TilemapRenderer>();
 
         /*
         // Get all behaviors (scripts that might need to be disabled)
@@ -83,7 +85,7 @@ public class RealityObject : MonoBehaviour
     private IEnumerator TransitionToState(bool active, float inactiveOpacity, float transitionSpeed)
     {
         float targetAlpha = active ? 1f : inactiveOpacity;
-        float currentAlpha = tilemaps.Length > 0 ? tilemaps[0].color.a : 1f;
+        float currentAlpha = tilemap != null ? tilemap.color.a : 1f;
 
         // Handle colliders and behaviors immediately
         SetCollidersState(active);
@@ -115,17 +117,14 @@ public class RealityObject : MonoBehaviour
     
     private void SetSpriteAlpha(float alpha)
     {
-        for (int i = 0; i < tilemaps.Length; i++)
+        if (tilemap != null)
         {
-            if (tilemaps[i] != null)
-            {
-                Color color = originalColor;
-                color.a = alpha;
-                tilemaps[i].color = color;
-            }
+            Color color = originalColor;
+            color.a = alpha;
+            tilemap.color = color;
         }
     }
-    
+
     private void SetCollidersState(bool active)
     {
         if (!disableCollidersWhenInactive && !active) return;

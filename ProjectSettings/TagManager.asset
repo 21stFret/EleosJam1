@@ -14,12 +14,12 @@ TagManager:
   - UI
   - Wall
   - LivingRealm
-  - DeathRealm
+  - SpiritRealm
   - Ghost
   - MiniMap
   - Prop
   - PropOnly
-  - 
+  - Enemy
   - 
   - 
   - 
@@ -45,8 +45,11 @@ TagManager:
   - name: Default
     uniqueID: 0
     locked: 0
-  - name: InLight
+  - name: SpiritRealm
     uniqueID: 1899394407
+    locked: 0
+  - name: LivingRealm
+    uniqueID: 2345391581
     locked: 0
   m_RenderingLayers:
   - Default

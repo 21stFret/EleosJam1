@@ -8,7 +8,7 @@ public class ExorcistProjectile : MonoBehaviour
     public float lifetime = 5f;
     public bool piercing = false;
     public int maxHits = 1;
-    public float knockbackForce = 30f;
+    public float knockbackForce = 10f;
     
     [Header("Visual Effects")]
     public GameObject hitEffectPrefab;
@@ -32,7 +32,13 @@ public class ExorcistProjectile : MonoBehaviour
     
     // Tracking
     private HashSet<Collider2D> hitTargets = new HashSet<Collider2D>();
-    
+
+    [Header("Explosion Settings")]
+    public GameObject explosionEffectPrefab;
+    public float explosionRadius = 5f;
+    public LayerMask enemyLayer;
+    public bool explosive = false;
+
     void Awake()
     {
         rb = GetComponent<Rigidbody2D>();
@@ -91,6 +97,7 @@ public class ExorcistProjectile : MonoBehaviour
         direction = shootDirection.normalized;
         speed = projectileSpeed;
         damage = projectileDamage;
+        explosive = combatPool.isExplosive;
         
         // Set velocity
         if (rb != null)
@@ -127,16 +134,16 @@ public class ExorcistProjectile : MonoBehaviour
             HitWall(other);
         }
     }
-    
+
     void HitTarget(Collider2D target, IDamageable damageable)
     {
         // Add to hit targets
         hitTargets.Add(target);
         hitCount++;
-        
+
         // Deal damage
         damageable.TakeDamage(damage);
-        
+
         // Add knockback if target has rigidbody
         Rigidbody2D targetRb = target.GetComponent<Rigidbody2D>();
         if (targetRb != null)
@@ -144,20 +151,26 @@ public class ExorcistProjectile : MonoBehaviour
             Vector2 knockbackDirection = direction;
             targetRb.AddForce(knockbackDirection * knockbackForce, ForceMode2D.Impulse);
         }
-        
+
         // Play hit sound
         if (hitSound != null && audioSource != null)
         {
             audioSource.PlayOneShot(hitSound);
         }
-        
+
         // Spawn hit effect
         SpawnHitEffect(transform.position);
-        
+
         // Check if projectile should be destroyed
         if (!piercing || hitCount >= maxHits)
         {
             ReturnToPool();
+        }
+
+        // Handle explosion
+        if (explosive)
+        {
+            Explode();
         }
     }
     
@@ -183,7 +196,30 @@ public class ExorcistProjectile : MonoBehaviour
             Destroy(effect, 2f);
         }
     }
-    
+
+    private void Explode()
+    {
+        // Create explosion effect
+        if (explosionEffectPrefab != null)
+        {
+            GameObject explosion = Instantiate(explosionEffectPrefab, transform.position, Quaternion.identity);
+            Destroy(explosion, 2f);
+        }
+
+        // Deal damage to nearby enemies
+        Collider2D[] hitEnemies = Physics2D.OverlapCircleAll(transform.position, explosionRadius, enemyLayer);
+        foreach (var enemy in hitEnemies)
+        {
+            IDamageable damageable = enemy.GetComponent<IDamageable>();
+            if (damageable != null)
+            {
+                damageable.TakeDamage(damage * combatPool.explosionPercentage);
+            }
+        }
+
+        ReturnToPool();
+    }
+
     void ReturnToPool()
     {
         // Stop all movement and effects

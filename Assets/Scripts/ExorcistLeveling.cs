@@ -146,6 +146,9 @@ public class ExorcistLeveling : MonoBehaviour
             case "Increased Speed":
                 exorcistController.moveSpeed += upgrade.value;
                 break;
+            case "Increased Attack Speed":
+                exorcistCombat.meleeCooldown -= upgrade.value;
+                break;
             case "Increased Damage":
                 exorcistCombat.meleeDamage += upgrade.value;
                 break;
@@ -162,9 +165,21 @@ public class ExorcistLeveling : MonoBehaviour
                 exorcistCombat.meleeRange += upgrade.value;
                 exorcistCombat.UpdateMeleeCollider();
                 break;
+            case "Knockback":
+                exorcistCombat.meleeKnockbackForce += upgrade.value;
+                break;
             // Dead upgrades
             case "Multi-Shot":
                 exorcistCombat.projectileAmount += upgrade.value;
+                break;
+            case "Quick Talisman":
+                exorcistCombat.projectileSpeed += upgrade.value * 10;
+                exorcistCombat.rangedCooldown -= upgrade.value;
+                break;
+            case "Exploding Talisman":
+                exorcistCombat.explosionRadius += upgrade.value * 10;
+                exorcistCombat.explosionPercentage += upgrade.value;
+                exorcistCombat.isExplosive = true;
                 break;
         }
 
