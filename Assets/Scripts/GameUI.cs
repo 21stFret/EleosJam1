@@ -24,6 +24,7 @@ public class GameUI : MonoBehaviour
     public TextMeshProUGUI winText;
     [Header("Bars")]
     public Image healthbar;
+    public Sprite[] healthBarSprites;
     public Image experienceLivingBar;
     public Image experienceSpiritBar;
 
@@ -233,8 +234,10 @@ public class GameUI : MonoBehaviour
     {
         if (healthbar != null)
         {
-            healthbar.fillAmount = Mathf.Clamp01(healthPercentage);
-            healthbar.color = Color.Lerp(Color.red, Color.green, healthPercentage);
+            int index = Mathf.RoundToInt(healthPercentage * (healthBarSprites.Length - 1));
+            index = Mathf.Clamp(index, 0, healthBarSprites.Length - 1);
+            healthbar.sprite = healthBarSprites[index];
+            //healthbar.color = Color.Lerp(Color.red, Color.green, healthPercentage);
         }
         else
         {

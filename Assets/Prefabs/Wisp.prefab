@@ -5151,7 +5151,7 @@ MonoBehaviour:
   isAlive: 1
   attackCooldown: 1
   attackRange: 1.5
-  damage: 20
+  damage: 5
   canAttack: 1
   deathEffect: {fileID: 2185623006570362419}
   realityType: 0

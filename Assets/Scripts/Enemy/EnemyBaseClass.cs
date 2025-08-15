@@ -38,7 +38,7 @@ public class EnemyBaseClass : MonoBehaviour, IDamageable
         canAttack = true;
     }
 
-    protected virtual void Die()
+    public virtual void Die()
     {
         isAlive = false;
 

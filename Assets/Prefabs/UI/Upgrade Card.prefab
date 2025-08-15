@@ -442,6 +442,9 @@ MonoBehaviour:
   upgradeNameText: {fileID: 3054695688142812544}
   upgradeDescriptionText: {fileID: 4569129604316205448}
   upgradeIcon: {fileID: 7125681098896208015}
+  livingScroll: {fileID: 21300000, guid: 87bae898677a2bd43a67845fed348a00, type: 3}
+  spiritScroll: {fileID: 21300000, guid: 0b80e8467d5839e4781797f083812666, type: 3}
+  universalScroll: {fileID: 21300000, guid: c63271795129dae408faadcdd0c4b5ef, type: 3}
 --- !u!114 &5546871005419020411
 MonoBehaviour:
   m_ObjectHideFlags: 0

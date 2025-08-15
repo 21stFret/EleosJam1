@@ -31,6 +31,9 @@ public class ExorcistController : MonoBehaviour, IDamageable
     public float maxHealth = 100f;
     public float currentHealth = 100f;
     public bool isAlive = true;
+    public ParticleSystem hitEffect;
+    public Material sharedPlayerMaterial;
+    private bool isHitFlashing;
 
     // Components
     private Rigidbody2D rb;
@@ -301,9 +304,23 @@ public class ExorcistController : MonoBehaviour, IDamageable
         if (currentHealth < 0)
             currentHealth = 0;
         GameManager.Instance?.gameUI.UpdateHealthBar(currentHealth / maxHealth);
+        StartCoroutine(PlayHitEffect());
         if (currentHealth == 0)
         {
             Die();
+        }
+    }
+
+    private IEnumerator PlayHitEffect()
+    {
+        if (!isHitFlashing)
+        {
+            isHitFlashing = true;
+            sharedPlayerMaterial.SetFloat("_StrongTintFade", 1);
+            hitEffect.Play();
+            yield return new WaitForSeconds(0.1f);
+            sharedPlayerMaterial.SetFloat("_StrongTintFade", 0);
+            isHitFlashing = false;
         }
     }
 

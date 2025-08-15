@@ -157,6 +157,7 @@ public class Reality
     [Header("Reality Info")]
     public string realityName = "Reality";
     public Color realityColor = Color.white;
+    public LayerMask realityLayerMask;
     
     [Header("Objects")]
     public List<GameObject> staticObjects = new List<GameObject>();
@@ -190,6 +191,26 @@ public class Reality
                 }
                 allRealityObjects.Add(realityObj);
                 realityObj.originalColor = realityColor; // Set the original color for the object
+                
+                // Convert LayerMask to layer index - get the first set bit
+                int layerIndex = 0;
+                int maskValue = realityLayerMask.value;
+                while (maskValue > 1)
+                {
+                    maskValue >>= 1;
+                    layerIndex++;
+                }
+                realityObj.gameObject.layer = layerIndex; // Set the layer for the object
+                
+                Debug.Log($"Object {obj.name} added to Reality {realityName}");
+                if (realityObj.minimap != null)
+                {
+                    realityObj.minimap.color = realityColor; // Set minimap color
+                }
+                else
+                {
+                    //Debug.LogWarning($"Object {obj.name} does not have a RealityObject minimap component!");
+                }
             }
         }
     }

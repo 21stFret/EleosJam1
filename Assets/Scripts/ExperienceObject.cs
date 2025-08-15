@@ -12,6 +12,8 @@ public class ExperienceObject : MonoBehaviour
     public float pulseTime = 0.5f;
     private float pulseTimer = 0f;
     public float speed = 1f;
+    public ParticleSystem pickupEffectLiving, pickupEffectSpirit;
+    public bool forceSpawn = false;
 
     private void Awake()
     {
@@ -19,6 +21,10 @@ public class ExperienceObject : MonoBehaviour
         if (_collider == null)
         {
             Debug.LogError("ExperienceObject requires a Collider2D component.");
+        }
+        if (forceSpawn)
+        {
+            ToggleActive(true);
         }
     }
 
@@ -42,16 +48,17 @@ public class ExperienceObject : MonoBehaviour
     {
         if (_active && targetTransform != null)
         {
+            float stoppingDistance = transform.localScale.x * 1.5f;
             if (!targetTransform.CompareTag("Player"))
             {
-                if (Vector2.Distance(transform.position, targetTransform.position) > transform.localScale.x)
+                if (Vector2.Distance(transform.position, targetTransform.position) > stoppingDistance)
                 {
                     transform.position = Vector2.MoveTowards(transform.position, targetTransform.position, Time.deltaTime * speed);
                 }
                 return;
             }
             transform.position = Vector2.MoveTowards(transform.position, targetTransform.position, Time.deltaTime * speed);
-            if (Vector2.Distance(transform.position, targetTransform.position) <  transform.localScale.x)
+            if (Vector2.Distance(transform.position, targetTransform.position) < stoppingDistance)
             {
                 ExperienceManager.Instance.GiveExperienceToPlayer(experienceAmount, realityType);
                 ToggleActive(false);
@@ -64,7 +71,6 @@ public class ExperienceObject : MonoBehaviour
         if (pulseTimer >= pulseTime)
         {
             pulseTimer = 0f;
-            //transform.DOPunchScale(Vector3.one * 1.5f, pulseTime).SetEase(Ease.InOutSine);
             foreach (var collider in Physics2D.OverlapCircleAll(transform.position, 5f))
             {
                 if (collider.GetComponent<ExperienceObject>() != null && collider.transform != transform)
@@ -81,5 +87,28 @@ public class ExperienceObject : MonoBehaviour
         gameObject.SetActive(isActive);
         _collider.enabled = isActive;
         _active = isActive;
+        if (isActive)
+        {
+            SwitchParticleSystems();
+        }
+        else
+        {
+            pickupEffectLiving.Stop();
+            pickupEffectSpirit.Stop();
+        }
+    }
+
+    private void SwitchParticleSystems()
+    {
+        if(realityType == RealityType.Living)
+        {
+            pickupEffectSpirit.Stop();
+            pickupEffectLiving.Play();
+        }
+        else if(realityType == RealityType.Spirit)
+        {
+            pickupEffectLiving.Stop();
+            pickupEffectSpirit.Play();
+        }
     }
 }

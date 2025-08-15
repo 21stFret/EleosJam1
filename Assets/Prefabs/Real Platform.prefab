@@ -315,6 +315,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   disableWhenInactive: 0
   disableCollidersWhenInactive: 1
+  minimap: {fileID: 6025285383885524428}
+  originalColor: {r: 0, g: 0, b: 0, a: 0}
 --- !u!114 &5340351836132698248
 MonoBehaviour:
   m_ObjectHideFlags: 0

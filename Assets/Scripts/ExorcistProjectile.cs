@@ -12,7 +12,6 @@ public class ExorcistProjectile : MonoBehaviour
     
     [Header("Visual Effects")]
     public GameObject hitEffectPrefab;
-    public TrailRenderer trail;
     
     [Header("Audio")]
     public AudioClip hitSound;
@@ -92,7 +91,6 @@ public class ExorcistProjectile : MonoBehaviour
         direction = shootDirection.normalized;
         speed = projectileSpeed;
         damage = projectileDamage;
-        trail.enabled = true; // Enable trail if it exists
         
         // Set velocity
         if (rb != null)
@@ -193,13 +191,7 @@ public class ExorcistProjectile : MonoBehaviour
         {
             rb.linearVelocity = Vector2.zero;
         }
-        
-        // Disable trail if it exists
-        if (trail != null)
-        {
-            trail.enabled = false;
-        }
-        
+                
         // Return to pool if we have a reference, otherwise destroy
         if (combatPool != null)
         {

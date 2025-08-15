@@ -13,6 +13,8 @@ public class RealityObject : MonoBehaviour
     private Collider2D[] colliders;
     private Tilemap[] tilemaps;
 
+    public SpriteRenderer minimap;
+
     
     // Original values
     public Color originalColor;

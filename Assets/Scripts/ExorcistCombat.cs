@@ -55,9 +55,14 @@ public class ExorcistCombat : MonoBehaviour
     // Projectile pooling
     private Queue<GameObject> projectilePool = new Queue<GameObject>();
     private Transform projectilePoolParent;
+    private bool isInitialized;
 
     public void Init()
     {
+        if (isInitialized) return;
+
+        isInitialized = true;
+
         // Get components
         realityManager = RealityManager.Instance;
         audioSource = GetComponent<AudioSource>();
@@ -178,16 +183,9 @@ public class ExorcistCombat : MonoBehaviour
         Vector2 attackDirection = transform.localScale.x > 0 ? Vector2.right : Vector2.left;
         if (meleeEffectPrefab != null)
         {
-            Vector3 effectPosition = transform.position + (Vector3)attackDirection * meleeRange * 0.5f;
-            GameObject effect = Instantiate(meleeEffectPrefab, effectPosition, Quaternion.identity);
-            
             // Flip effect based on player direction
-            if (transform.localScale.x < 0)
-            {
-                effect.transform.localScale = new Vector3(-1, 1, 1);
-            }
-            
-            Destroy(effect, 1f);
+            //meleeEffectPrefab.transform.localScale = attackDirection;
+            meleeEffectPrefab.GetComponent<Animator>().SetTrigger("Attack");
         }
         
         // Wait for attack duration

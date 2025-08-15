@@ -35,7 +35,7 @@ public class GameManager : MonoBehaviour
     public static GameManager Instance { get; private set; }
 
     public PlayerInput playerInput;
-    private ExorcistCombat _exorcistCombat;
+    public ExorcistCombat _exorcistCombat;
     public ExorcistLeveling exorcistLeveling;
 
     public float enemyWavetimer;
@@ -50,7 +50,7 @@ public class GameManager : MonoBehaviour
         {
             Instance = this;
         }
-        
+
         gameUI = GetComponent<GameUI>();
     }
 
@@ -59,6 +59,7 @@ public class GameManager : MonoBehaviour
         if (playerInput != null)
         {
             playerInput.DeactivateInput();
+            _exorcistCombat.Init();
         }
         if (spawnOnStart)
         {
@@ -109,7 +110,6 @@ public class GameManager : MonoBehaviour
 
         Debug.Log("Game Started!");
         OnGameStart?.Invoke();
-        _exorcistCombat = FindFirstObjectByType<ExorcistCombat>();
         Time.timeScale = 1f; // Ensure game is running at normal speed
         if (playerInput != null)
         {
@@ -153,6 +153,23 @@ public class GameManager : MonoBehaviour
         Transform spawnPoint = spawnPoints[Random.Range(0, spawnPoints.Length)];
 
         // Spawn the enemy
+        GameObject enemyObject = Instantiate(enemyPrefab, spawnPoint.position, spawnPoint.rotation);
+        EnemyBaseClass enemy = enemyObject.GetComponent<EnemyBaseClass>();
+
+        if (enemy != null)
+        {
+            RegisterEnemy(enemy);
+            totalEnemiesSpawned++;
+            Debug.Log($"Spawned enemy {enemy.name} at {spawnPoint.position}");
+        }
+        else
+        {
+            Debug.LogWarning($"Enemy prefab {enemyPrefab.name} does not have EnemyBaseClass component!");
+        }
+    }
+
+    public void SpawnSpecificEnemy(GameObject enemyPrefab, Transform spawnPoint)
+    {
         GameObject enemyObject = Instantiate(enemyPrefab, spawnPoint.position, spawnPoint.rotation);
         EnemyBaseClass enemy = enemyObject.GetComponent<EnemyBaseClass>();
 
@@ -296,6 +313,10 @@ public class GameManager : MonoBehaviour
     {
         return gameStarted;
     }
+    public GameObject GetEnemyPrefab(EnemyType type)
+    {
+        return enemyPrefabs[(int)type];
+    }
 
     public List<EnemyBaseClass> GetActiveEnemies()
     {
@@ -337,4 +358,11 @@ public class GameManager : MonoBehaviour
             }
         }
     }
+}
+public enum EnemyType
+{
+    Wisp,
+    Booky,
+    Sulker,
+
 }
