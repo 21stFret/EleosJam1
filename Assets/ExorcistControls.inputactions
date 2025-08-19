@@ -27,7 +27,7 @@
                     "name": "SwitchReality",
                     "type": "Button",
                     "id": "a8f7e9c2-4b6d-4e8a-9c7f-1a5e3b8d6f2a",
-                    "expectedControlType": "Button",
+                    "expectedControlType": "",
                     "processors": "",
                     "interactions": "",
                     "initialStateCheck": false
@@ -49,6 +49,15 @@
                     "processors": "",
                     "interactions": "",
                     "initialStateCheck": false
+                },
+                {
+                    "name": "Aim",
+                    "type": "Value",
+                    "id": "b1f869bc-e272-42cd-bd90-3357535e8117",
+                    "expectedControlType": "Vector2",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": true
                 }
             ],
             "bindings": [
@@ -186,6 +195,17 @@
                 },
                 {
                     "name": "",
+                    "id": "7c0da586-df1e-47c3-b989-e34622d99a2b",
+                    "path": "<Gamepad>/buttonEast",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Jump",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
                     "id": "c5a8f2e9-7b4d-4a6c-8e9f-2d7a5c3e8b1f",
                     "path": "<Keyboard>/leftShift",
                     "interactions": "",
@@ -198,7 +218,18 @@
                 {
                     "name": "",
                     "id": "89b0126f-c480-4cab-a9e8-0117f9a8bb17",
-                    "path": "<Gamepad>/buttonNorth",
+                    "path": "<Gamepad>/leftTrigger",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "SwitchReality",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "7bcda339-5396-471c-9c41-9175546d017a",
+                    "path": "<Gamepad>/rightTrigger",
                     "interactions": "",
                     "processors": "",
                     "groups": "",
@@ -220,7 +251,18 @@
                 {
                     "name": "",
                     "id": "5da8cc74-590e-4d7a-abeb-20d89f91f08b",
-                    "path": "<Gamepad>/rightTrigger",
+                    "path": "<Gamepad>/rightShoulder",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Attack",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "98ebb344-f5b9-4b50-8b70-c65024591a71",
+                    "path": "<Gamepad>/leftShoulder",
                     "interactions": "",
                     "processors": "",
                     "groups": "",
@@ -247,6 +289,28 @@
                     "processors": "",
                     "groups": "",
                     "action": "MiniMap",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "6c46a97a-15f9-4f86-879a-0d29f95aab7b",
+                    "path": "<Mouse>/position",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Aim",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "8f82b67b-2f2b-4de2-9d5a-9b0e7a1aafd9",
+                    "path": "<Gamepad>/rightStick",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Aim",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }

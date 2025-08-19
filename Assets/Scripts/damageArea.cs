@@ -22,7 +22,6 @@ public class damageArea : MonoBehaviour
         other.TryGetComponent(out IDamageable damageable);
         if (damageable != null)
         {
-            damageEffect.Play();
             StartCoroutine(DealDamage(damageable));
             canDamage = false;
         }

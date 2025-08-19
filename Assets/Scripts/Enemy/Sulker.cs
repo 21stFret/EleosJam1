@@ -37,11 +37,7 @@ public class Sulker : EnemyBaseClass
         {
             rb = gameObject.AddComponent<Rigidbody2D>();
         }
-        
-        rb.gravityScale = 0f; // Disable gravity for top-down movement
-        rb.freezeRotation = true; // Prevent rotation from physics
-        rb.linearDamping = 5f; // Add some drag for natural deceleration
-        
+                
         lastPos = transform.position;
         SetNewWanderTarget();
     }
@@ -79,9 +75,9 @@ public class Sulker : EnemyBaseClass
         rb.AddForce(fleeForce, ForceMode2D.Force);
         
         // Limit speed
-        if (rb.linearVelocity.magnitude > speed * 1.5f) // Allow faster fleeing
+        if (rb.linearVelocity.magnitude > speed * 1.2f) // Allow faster fleeing
         {
-            rb.linearVelocity = rb.linearVelocity.normalized * speed * 1.5f;
+            rb.linearVelocity = rb.linearVelocity.normalized * speed * 1.2f;
         }
         
         // Set new wander target in flee direction
@@ -97,6 +93,7 @@ public class Sulker : EnemyBaseClass
             attackPrefab.transform.position = transform.position;
             attackPrefab.transform.SetParent(null);
             attackPrefab._enabled = true;
+            attackPrefab.damageEffect.Play();
         }
         attackCooldown = attackTimer;
         lastPos = transform.position;

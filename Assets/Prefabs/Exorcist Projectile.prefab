@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 8248418126367810601}
   - component: {fileID: 6475759692115231215}
   - component: {fileID: 8304349625007370526}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: Exorcist Projectile
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -115,8 +115,13 @@ MonoBehaviour:
   maxHits: 1
   knockbackForce: 30
   hitEffectPrefab: {fileID: 0}
-  trail: {fileID: 0}
   hitSound: {fileID: 0}
+  explosionEffectPrefab: {fileID: 0}
+  explosionRadius: 5
+  enemyLayer:
+    serializedVersion: 2
+    m_Bits: 512
+  explosive: 0
 --- !u!1 &8102704608148002761
 GameObject:
   m_ObjectHideFlags: 0
@@ -128,7 +133,7 @@ GameObject:
   - component: {fileID: 7473230933812624257}
   - component: {fileID: 1908874770405836964}
   - component: {fileID: 2639444443844445978}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Particle System
   m_TagString: Untagged
   m_Icon: {fileID: 0}

@@ -15,8 +15,9 @@ public class RealityManager : MonoBehaviour
     public static RealityManager Instance;
 
     [Header("Reality Settings")]
-    public int currentReality = 0;
+    public int currentRealityIndex = 0;
     public List<Reality> realities = new List<Reality>();
+    public Reality currentReality;
 
     [Header("Input")]
     public InputActionAsset inputActions;
@@ -31,8 +32,7 @@ public class RealityManager : MonoBehaviour
     private AudioSource audioSource;
     public RealityType currentRealityType;
 
-    public Light2D light2DLiving;
-    public Light2D light2DSpirit;
+    public Light2D light2D;
 
     void Awake()
     {
@@ -89,7 +89,7 @@ public class RealityManager : MonoBehaviour
                 realities[i].Initialize();
             }
         }
-        currentReality = -1;
+        currentRealityIndex = -1;
     }
 
     void OnSwitchReality(InputAction.CallbackContext context)
@@ -99,7 +99,7 @@ public class RealityManager : MonoBehaviour
 
     public void SwitchToNextReality()
     {
-        int nextReality = (currentReality + 1) % realities.Count;
+        int nextReality = (currentRealityIndex + 1) % realities.Count;
         SwitchToReality(nextReality);
     }
 
@@ -111,15 +111,16 @@ public class RealityManager : MonoBehaviour
             return;
         }
 
-        if (realityIndex == currentReality) return;
+        if (realityIndex == currentRealityIndex) return;
 
-        currentReality = realityIndex;
+        currentRealityIndex = realityIndex;
         currentRealityType = (RealityType)realityIndex;
+        currentReality = realities[realityIndex];
 
         // Update all realities
         for (int i = 0; i < realities.Count; i++)
         {
-            bool isActive = (i == currentReality);
+            bool isActive = (i == currentRealityIndex);
             realities[i].SetActive(isActive, inactiveOpacity, transitionSpeed);
         }
 
@@ -129,10 +130,9 @@ public class RealityManager : MonoBehaviour
             audioSource.PlayOneShot(switchSound);
         }
 
-        light2DLiving.enabled = (currentRealityType == RealityType.Living);
-        light2DSpirit.enabled = (currentRealityType == RealityType.Spirit);
+        light2D.color = currentReality.realityColor;
 
-        Debug.Log($"Switched to Reality {currentReality}");
+        Debug.Log($"Switched to Reality {currentRealityIndex}");
     }
 
     // Method to add objects to a reality at runtime
@@ -143,7 +143,7 @@ public class RealityManager : MonoBehaviour
             realities[realityIndex].AddObject(obj);
 
             // Update the object's state based on current reality
-            bool isActive = (realityIndex == currentReality);
+            bool isActive = (realityIndex == currentRealityIndex);
             realities[realityIndex].SetObjectState(obj, isActive, inactiveOpacity);
         }
     }

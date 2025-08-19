@@ -17,6 +17,7 @@ public class ExorcistCombat : MonoBehaviour
     public LayerMask enemyLayerMask = 1;
     public float meleeAttackDuration = 0.2f;
     public float meleeKnockbackForce = 5f;
+    public float meleeOffset = 0.5f;
 
     [Header("Ranged Attack (Reality 0)")]
     public GameObject projectilePrefab;
@@ -103,8 +104,6 @@ public class ExorcistCombat : MonoBehaviour
 
         meleeCollider = meleeHitbox.GetComponent<BoxCollider2D>();
         meleeHitbox.Initialize(this);
-
-
     }
     
     void OnEnable()
@@ -139,7 +138,7 @@ public class ExorcistCombat : MonoBehaviour
         
         if (realityManager != null)
         {
-            int currentReality = realityManager.currentReality;
+            int currentReality = realityManager.currentRealityIndex;
             
             if (currentReality == 1)
             {
@@ -160,7 +159,7 @@ public class ExorcistCombat : MonoBehaviour
     void TryMeleeAttack()
     {
         if (Time.time - lastMeleeAttackTime < meleeCooldown) return;
-        
+        UpdateMeleeCollider();
         StartCoroutine(PerformMeleeAttack());
     }
     
@@ -212,22 +211,24 @@ public class ExorcistCombat : MonoBehaviour
         {
             audioSource.PlayOneShot(rangedAttackSound);
         }
-        
-        // Spawn muzzle flash
-        if (muzzleFlashPrefab != null && firePoint != null)
-        {
-            GameObject muzzleFlash = Instantiate(muzzleFlashPrefab, firePoint.position, firePoint.rotation);
-            Destroy(muzzleFlash, 0.2f);
-        }
+
+        // Set projectile direction based on mouse position
+        Vector2 shootDirection = (Camera.main.ScreenToWorldPoint(Mouse.current.position.ReadValue()) - firePoint.position).normalized;
         
         for (int i = 0; i < projectileAmount; i++)
         {
-            SpawnProjectile();
+            if (projectileAmount == 1)
+            {
+                SpawnProjectile(shootDirection);
+                return;
+            }
+            Vector2 spreadDirection = Quaternion.Euler(0, 0, -10f + i * (20f / (projectileAmount - 1))) * shootDirection;
+            SpawnProjectile(spreadDirection);
         }
 
     }
 
-    void SpawnProjectile()
+    void SpawnProjectile(Vector2 direction)
     {
         GameObject projectile = GetPooledProjectile();
         if (projectile != null && firePoint != null)
@@ -238,17 +239,11 @@ public class ExorcistCombat : MonoBehaviour
             projectile.transform.SetParent(null); // Detach from pool parent
             projectile.SetActive(true);
 
-            // Set projectile direction based on mouse position
-            Vector2 shootDirection = (Camera.main.ScreenToWorldPoint(Mouse.current.position.ReadValue()) - firePoint.position).normalized;
-            // Set random angle variation
-            float angleVariation = Random.Range(-10f, 10f);
-            shootDirection = Quaternion.Euler(0, 0, angleVariation) * shootDirection;
-
             // Configure projectile
             ExorcistProjectile projectileScript = projectile.GetComponent<ExorcistProjectile>();
             if (projectileScript != null)
             {
-                projectileScript.Initialize(shootDirection, projectileSpeed, projectileDamage);
+                projectileScript.Initialize(direction, projectileSpeed, projectileDamage);
             }
         }
     }
@@ -267,6 +262,9 @@ public class ExorcistCombat : MonoBehaviour
     {
         if (meleeHitbox != null)
         {
+            Vector2 meleeDirection = (Camera.main.ScreenToWorldPoint(Mouse.current.position.ReadValue()) - transform.position).normalized;
+            meleeHitbox.gameObject.transform.position = transform.position + (Vector3)meleeDirection.normalized  * meleeOffset;
+            meleeHitbox.gameObject.transform.rotation = Quaternion.LookRotation(meleeHitbox.gameObject.transform.forward, meleeDirection);
             meleeHitbox.gameObject.SetActive(enable);
         }
     }
@@ -321,27 +319,6 @@ public class ExorcistCombat : MonoBehaviour
             projectile.SetActive(false);
             projectile.transform.SetParent(projectilePoolParent);
             projectilePool.Enqueue(projectile);
-        }
-    }
-    
-    void OnDrawGizmosSelected()
-    {
-        // Draw melee attack range
-        Gizmos.color = Color.red;
-        Vector2 attackDirection = transform.localScale.x > 0 ? Vector2.right : Vector2.left;
-        Vector2 attackPosition = (Vector2)transform.position + attackDirection * (meleeRange * 0.5f);
-        Vector3 boxSize = new Vector3(meleeRange, meleeHeight, 0.1f);
-        Gizmos.DrawWireCube(attackPosition, boxSize);
-        
-        // Draw fire point
-        if (firePoint != null)
-        {
-            Gizmos.color = Color.blue;
-            Gizmos.DrawWireSphere(firePoint.position, 0.2f);
-            
-            // Draw firing direction
-            Vector2 shootDirection = transform.localScale.x > 0 ? Vector2.right : Vector2.left;
-            Gizmos.DrawRay(firePoint.position, shootDirection * 2f);
         }
     }
 }

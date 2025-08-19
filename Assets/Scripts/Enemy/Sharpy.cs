@@ -90,4 +90,10 @@ public class Sharpy : EnemyBaseClass
         base.Die();
         GameManager.Instance.SpawnSpecificEnemy(GameManager.Instance.GetEnemyPrefab(EnemyType.Sulker), transform);
     }
+
+    private void OnCollisionEnter2D(Collision2D other) {
+        if (other.gameObject.CompareTag("Player")) {
+            other.gameObject.GetComponent<IDamageable>().TakeDamage(damage);
+        }
+    }
 }

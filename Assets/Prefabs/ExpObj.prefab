@@ -5036,7 +5036,7 @@ CircleCollider2D:
   m_CompositeOperation: 0
   m_CompositeOrder: 0
   m_Offset: {x: 0, y: 0}
-  m_Radius: 4
+  m_Radius: 10
 --- !u!114 &1153625062579899590
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5054,10 +5054,11 @@ MonoBehaviour:
   _active: 1
   targetTransform: {fileID: 0}
   pulseTime: 2
-  speed: 1
+  speed: 3
   pickupEffectLiving: {fileID: 6489790353306090952}
   pickupEffectSpirit: {fileID: 6839318696626794831}
   forceSpawn: 0
+  pickupDistance: 1
 --- !u!1 &8143332321212768460
 GameObject:
   m_ObjectHideFlags: 0

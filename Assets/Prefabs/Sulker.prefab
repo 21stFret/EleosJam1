@@ -10143,8 +10143,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: aa1143d0ff0296142876bca087ddba45, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  health: 10
-  speed: 4
+  health: 2
+  speed: 3
   isAlive: 1
   attackCooldown: 1
   attackRange: 1.5
@@ -10161,7 +10161,7 @@ MonoBehaviour:
   dodgePulseTimer: 0.5
   attackTimer: 5
   wanderPulseTimer: 3
-  wanderRadius: 10
+  wanderRadius: 5
 --- !u!1 &7591421122633753932
 GameObject:
   m_ObjectHideFlags: 0

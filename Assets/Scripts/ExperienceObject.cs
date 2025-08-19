@@ -14,6 +14,7 @@ public class ExperienceObject : MonoBehaviour
     public float speed = 1f;
     public ParticleSystem pickupEffectLiving, pickupEffectSpirit;
     public bool forceSpawn = false;
+    public float pickupDistance = 1f;
 
     private void Awake()
     {
@@ -58,7 +59,7 @@ public class ExperienceObject : MonoBehaviour
                 return;
             }
             transform.position = Vector2.MoveTowards(transform.position, targetTransform.position, Time.deltaTime * speed);
-            if (Vector2.Distance(transform.position, targetTransform.position) < stoppingDistance)
+            if (Vector2.Distance(transform.position, targetTransform.position) < pickupDistance)
             {
                 ExperienceManager.Instance.GiveExperienceToPlayer(experienceAmount, realityType);
                 ToggleActive(false);

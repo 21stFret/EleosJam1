@@ -34,6 +34,7 @@ public class ExorcistController : MonoBehaviour, IDamageable
     public ParticleSystem hitEffect;
     public Material sharedPlayerMaterial;
     private bool isHitFlashing;
+    private bool isInvulnerable = false;
 
     // Components
     private Rigidbody2D rb;
@@ -62,6 +63,7 @@ public class ExorcistController : MonoBehaviour, IDamageable
         moveAction = inputActions.FindAction("Move");
         jumpAction = inputActions.FindAction("Jump");
         minimapAction = inputActions.FindAction("Minimap");
+        sharedPlayerMaterial.SetFloat("_StrongTintFade", 0);
     }
 
     void OnEnable()
@@ -298,6 +300,8 @@ public class ExorcistController : MonoBehaviour, IDamageable
 
     public void TakeDamage(float amount, float stunTime = 0f, float knockbackForce = 0f)
     {
+        if (isInvulnerable) return;
+
         // Implement damage logic here
         Debug.Log($"Exorsist took {amount} damage!");
         currentHealth -= amount;
@@ -308,7 +312,9 @@ public class ExorcistController : MonoBehaviour, IDamageable
         if (currentHealth == 0)
         {
             Die();
+            return;
         }
+        StartCoroutine(Immunity());
     }
 
     private IEnumerator PlayHitEffect()
@@ -322,6 +328,13 @@ public class ExorcistController : MonoBehaviour, IDamageable
             sharedPlayerMaterial.SetFloat("_StrongTintFade", 0);
             isHitFlashing = false;
         }
+    }
+
+    private IEnumerator Immunity()
+    {
+        isInvulnerable = true;
+        yield return new WaitForSeconds(0.2f);
+        isInvulnerable = false;
     }
 
     public void Die()

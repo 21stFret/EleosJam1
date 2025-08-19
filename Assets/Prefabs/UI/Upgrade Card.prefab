@@ -67,8 +67,8 @@ MonoBehaviour:
       m_Calls: []
   m_text: Attack Up
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: bc9987ac84b042446ba0c334e3ff2abf, type: 2}
-  m_sharedMaterial: {fileID: 8829840592238310272, guid: bc9987ac84b042446ba0c334e3ff2abf, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: 01f4f3262b0a91643823dc4d721baf12, type: 2}
+  m_sharedMaterial: {fileID: -3031618203380460998, guid: 01f4f3262b0a91643823dc4d721baf12, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -92,13 +92,13 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 72
+  m_fontSize: 38.9
   m_fontSizeBase: 66.2
   m_fontWeight: 400
   m_enableAutoSizing: 1
   m_fontSizeMin: 18
   m_fontSizeMax: 72
-  m_fontStyle: 0
+  m_fontStyle: 1
   m_HorizontalAlignment: 2
   m_VerticalAlignment: 512
   m_textAlignment: 65535
@@ -278,8 +278,8 @@ MonoBehaviour:
       m_Calls: []
   m_text: Increases attack damage across all weapons.
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: bc9987ac84b042446ba0c334e3ff2abf, type: 2}
-  m_sharedMaterial: {fileID: 8829840592238310272, guid: bc9987ac84b042446ba0c334e3ff2abf, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: 01f4f3262b0a91643823dc4d721baf12, type: 2}
+  m_sharedMaterial: {fileID: -3031618203380460998, guid: 01f4f3262b0a91643823dc4d721baf12, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -303,7 +303,7 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 36
+  m_fontSize: 28.2
   m_fontSizeBase: 66.2
   m_fontWeight: 400
   m_enableAutoSizing: 1

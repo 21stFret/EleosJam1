@@ -146,8 +146,8 @@ public class GameManager : MonoBehaviour
 
     void SpawnRandomEnemy()
     {
-        // Choose random enemy prefab
-        GameObject enemyPrefab = enemyPrefabs[Random.Range(0, enemyPrefabs.Length)];
+        // Choose random enemy prefab from first 2
+        GameObject enemyPrefab = enemyPrefabs[Random.Range(0, 2)];
 
         // Choose random spawn point
         Transform spawnPoint = spawnPoints[Random.Range(0, spawnPoints.Length)];
@@ -361,9 +361,10 @@ public class GameManager : MonoBehaviour
 }
 public enum EnemyType
 {
-    Wisp,
     Booky,
+    Sharpy,
+    Wisp,
     Sulker,
-    Sharpy
+
 
 }

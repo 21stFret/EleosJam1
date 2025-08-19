@@ -37,7 +37,12 @@ public class EnemyBaseClass : MonoBehaviour, IDamageable
         health -= amount;
         if (health <= 0)
         {
+            health = 0;
             Die();
+        }
+        if(!isAlive)
+        {
+            return;
         }
         if (stunTime > 0f)
         {

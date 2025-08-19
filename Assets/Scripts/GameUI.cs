@@ -30,6 +30,8 @@ public class GameUI : MonoBehaviour
 
 
     public GameObject minimap;
+    public float minimapScaleLevel = 1f;
+    public int currentMinimapScale;
 
 
     void Start()
@@ -89,7 +91,18 @@ public class GameUI : MonoBehaviour
 
     public void ToggleMinimap()
     {
-        minimap.SetActive(!minimap.activeSelf);
+        currentMinimapScale++;
+        if (currentMinimapScale > 2)
+        {
+            currentMinimapScale = 0;
+            minimap.SetActive(!minimap.activeSelf);
+        }
+        else
+        {
+            minimap.SetActive(true);
+            minimap.transform.localScale = Vector3.one * (minimapScaleLevel * currentMinimapScale);
+        }
+
     }
 
     void UpdateUI()
