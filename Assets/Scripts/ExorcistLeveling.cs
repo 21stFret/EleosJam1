@@ -16,8 +16,26 @@ public class ExorcistLeveling : MonoBehaviour
     public ExorcistController exorcistController;
     public List<ExorcistUpgrade> levelUpUpgrades = new List<ExorcistUpgrade>();
     public List<UpgradeCardUI> upgradeCardUIs = new List<UpgradeCardUI>();
-    public GameObject levelUpUI;
+    public GameUI gameUI;
+    public float baseAttack, baseSpeed, baseHealth, baseAttackSpeed, baseAttackRange, baseProjectileSpeed, baseKnockback;
+    public int knockbackCount;
 
+    void Start()
+    {
+        SetBaseValues();
+    }
+
+    public void SetBaseValues()
+    {
+        baseAttack = exorcistCombat.meleeDamage;
+        baseSpeed = exorcistController.moveSpeed;
+        baseHealth = exorcistController.maxHealth;
+        baseAttackSpeed = exorcistCombat.meleeCooldown;
+        baseAttackRange = exorcistCombat.meleeRange;
+        baseProjectileSpeed = exorcistCombat.projectileSpeed;
+        baseKnockback = exorcistCombat.meleeKnockbackForce;
+        knockbackCount = 1;
+    }
 
     public void AddExperience(int amount, RealityType realityType)
     {
@@ -109,14 +127,7 @@ public class ExorcistLeveling : MonoBehaviour
             }
         }
         // Show level-up UI
-        if (levelUpUI != null)
-        {
-            levelUpUI.SetActive(true);
-        }
-        else
-        {
-            Debug.LogWarning("Level Up UI is not assigned!");
-        }
+        gameUI.ShowLevelUpUI();
     }
 
     public void OnSelectCard(int index)
@@ -141,40 +152,50 @@ public class ExorcistLeveling : MonoBehaviour
             Debug.Log($"Applied upgrade: {upgrade.upgradeName}");
         }
 
+        //convert value to percentage
+        float percentageValue = upgrade.value / 100;
+
         switch (upgrade.upgradeName)
         {
-            case "Increased Speed":
-                exorcistController.moveSpeed += upgrade.value;
+            case "Movement Speed Up":
+                var speedUpgrade = baseSpeed * percentageValue;
+                exorcistController.moveSpeed += speedUpgrade;
                 break;
-            case "Increased Attack Speed":
-                exorcistCombat.meleeCooldown -= upgrade.value;
+            case "Attack Speed Up":
+                var attackSpeedUpgrade = baseAttackSpeed * percentageValue;
+                exorcistCombat.meleeCooldown -= attackSpeedUpgrade;
                 break;
-            case "Increased Damage":
-                exorcistCombat.meleeDamage += upgrade.value;
+            case "Damage Up":
+                var damageUpgrade = baseAttack * percentageValue;
+                exorcistCombat.meleeDamage += damageUpgrade;
                 break;
-            case "Increased Health":
-                exorcistController.maxHealth += (int)upgrade.value;
-                exorcistController.currentHealth += (int)upgrade.value; // Heal the player
+            case "Max Health Up":
+                var healthUpgrade = baseHealth * percentageValue;
+                exorcistController.maxHealth += (int)healthUpgrade;
+                exorcistController.currentHealth += (int)healthUpgrade; // Heal the player
                 GameManager.Instance.gameUI.UpdateHealthBar(exorcistController.currentHealth / (float)exorcistController.maxHealth);
                 break;
             // Living upgrades
             case "Enemy Stun":
                 exorcistCombat.stunTime += upgrade.value;
                 break;
-            case "Extend Attack Range":
-                exorcistCombat.meleeRange += upgrade.value;
+            case "Extra Attack Range":
+                var attackRangeUpgrade = baseAttackRange * percentageValue;
+                exorcistCombat.meleeRange += attackRangeUpgrade;
                 exorcistCombat.UpdateMeleeCollider();
                 break;
             case "Knockback":
-                exorcistCombat.meleeKnockbackForce += upgrade.value;
+                knockbackCount++;
+                var knockbackUpgrade = baseKnockback * knockbackCount;
+                exorcistCombat.meleeKnockbackForce += knockbackUpgrade;
                 break;
             // Dead upgrades
             case "Multi-Shot":
                 exorcistCombat.projectileAmount += upgrade.value;
                 break;
-            case "Quick Talisman":
-                exorcistCombat.projectileSpeed += upgrade.value * 10;
-                exorcistCombat.rangedCooldown -= upgrade.value;
+            case "Projectile Speed Up":
+                var projectileSpeedUpgrade = baseProjectileSpeed * percentageValue;
+                exorcistCombat.projectileSpeed += projectileSpeedUpgrade;
                 break;
             case "Exploding Talisman":
                 exorcistCombat.explosionRadius += upgrade.value * 10;
@@ -183,7 +204,7 @@ public class ExorcistLeveling : MonoBehaviour
                 break;
         }
 
-        levelUpUI.SetActive(false);
+        gameUI.HideLevelUpUI();
         GameManager.Instance.ResumeGame();
     }
 }

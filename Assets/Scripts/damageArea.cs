@@ -6,14 +6,15 @@ public class damageArea : MonoBehaviour
 {
     public float damageAmount;
     public float damageInterval = 1f;
+    public float damageDuration = 2f;
     private bool canDamage = true;
     public ParticleSystem damageEffect;
-    public bool _enabled;
+    private bool _enabled;
 
     private void OnTriggerEnter2D(Collider2D other)
     {
-        if (!canDamage || !_enabled) return;
-        
+        if (!_enabled) return;
+
         if (!other.CompareTag("Player"))
         {
             return;
@@ -38,14 +39,25 @@ public class damageArea : MonoBehaviour
 
     public void EnableDamage()
     {
+        _enabled = true;
         canDamage = true;
         gameObject.SetActive(true);
+        StartCoroutine(DisableDamageAfterDelay());
+        damageEffect.Play();
     }
 
     public void DisableDamage()
     {
+        _enabled = false;
         canDamage = false;
         gameObject.SetActive(false);
+        damageEffect.Stop();
+    }
+
+    private IEnumerator DisableDamageAfterDelay()
+    {
+        yield return new WaitForSeconds(damageDuration);
+        DisableDamage();
     }
 
 }

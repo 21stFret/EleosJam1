@@ -56,7 +56,7 @@ SpriteRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: a97c105638bdf8b4a8650670310a4cd3, type: 2}
+  - {fileID: 2100000, guid: 2ab04603c62620b4eac848747314bdb7, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -74,8 +74,8 @@ SpriteRenderer:
   m_AutoUVMaxDistance: 0.5
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
-  m_SortingLayerID: 0
-  m_SortingLayer: 0
+  m_SortingLayerID: 1899394407
+  m_SortingLayer: 1
   m_SortingOrder: 2
   m_Sprite: {fileID: 7482667652216324306, guid: 75f5f34dc1b5347e0b8351032682f224, type: 3}
   m_Color: {r: 0.62895584, g: 0, b: 1, a: 1}
@@ -10152,6 +10152,7 @@ MonoBehaviour:
   canAttack: 1
   deathEffect: {fileID: 2185623006570362419}
   realityType: 0
+  enemyRenderer: {fileID: 3778855928653064689}
   fleeDistance: 5
   acceleration: 100
   attackPrefab: {fileID: 5181934008847118642}
@@ -10210,8 +10211,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   damageAmount: 2
   damageInterval: 1
+  damageDuration: 2
   damageEffect: {fileID: 6824941252036948874}
-  _enabled: 0
 --- !u!58 &1384617196930681352
 CircleCollider2D:
   m_ObjectHideFlags: 0
@@ -20027,7 +20028,7 @@ SpriteRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: a97c105638bdf8b4a8650670310a4cd3, type: 2}
+  - {fileID: 2100000, guid: 2ab04603c62620b4eac848747314bdb7, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -20045,8 +20046,8 @@ SpriteRenderer:
   m_AutoUVMaxDistance: 0.5
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
-  m_SortingLayerID: 0
-  m_SortingLayer: 0
+  m_SortingLayerID: 1899394407
+  m_SortingLayer: 1
   m_SortingOrder: 1
   m_Sprite: {fileID: -2413806693520163455, guid: a86470a33a6bf42c4b3595704624658b, type: 3}
   m_Color: {r: 1, g: 0, b: 0.92438126, a: 1}

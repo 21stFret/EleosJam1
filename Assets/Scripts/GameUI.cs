@@ -33,6 +33,8 @@ public class GameUI : MonoBehaviour
     public float minimapScaleLevel = 1f;
     public int currentMinimapScale;
 
+    public GameObject levelUpUI;
+
 
     void Start()
     {
@@ -80,7 +82,7 @@ public class GameUI : MonoBehaviour
     {
         if (gameHUD != null)
             gameHUD.SetActive(true);
-        
+
         if (startgamePanel != null)
             startgamePanel.SetActive(false);
         if (pauseMenu != null)
@@ -103,6 +105,33 @@ public class GameUI : MonoBehaviour
             minimap.transform.localScale = Vector3.one * (minimapScaleLevel * currentMinimapScale);
         }
 
+    }
+
+    
+    public void ShowLevelUpUI()
+    {
+        if (levelUpUI != null)
+        {
+            levelUpUI.SetActive(true);
+            Debug.Log("UI: Level Up UI Shown");
+        }
+        else
+        {
+            Debug.LogWarning("Level Up UI not assigned in GameUI!");
+        }
+    }
+
+    public void HideLevelUpUI()
+    {
+        if (levelUpUI != null)
+        {
+            levelUpUI.SetActive(false);
+            Debug.Log("UI: Level Up UI Hidden");
+        }
+        else
+        {
+            Debug.LogWarning("Level Up UI not assigned in GameUI!");
+        }
     }
 
     void UpdateUI()

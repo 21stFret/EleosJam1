@@ -17,6 +17,21 @@ public class EnemyBaseClass : MonoBehaviour, IDamageable
     private ExorcistController playerController;
     protected bool isStunned = false;
     private bool isImmune = false;
+    private bool isHitFlashing = false;
+    private Material enemyMaterial;
+    public Renderer enemyRenderer;
+    private void Awake()
+    {
+        if (enemyRenderer != null)
+        {
+            enemyMaterial = enemyRenderer.material;
+            enemyMaterial.SetFloat("_StrongTintFade", 0);
+        }
+        else
+        {
+            Debug.LogWarning("Enemy Renderer is not assigned. Enemy material will not be set.");
+        }
+    }
 
     public void StartingImmunity()
     {
@@ -40,10 +55,11 @@ public class EnemyBaseClass : MonoBehaviour, IDamageable
             health = 0;
             Die();
         }
-        if(!isAlive)
+        if (!isAlive)
         {
             return;
         }
+        StartCoroutine(PlayHitEffect());
         if (stunTime > 0f)
         {
             StartCoroutine(StunCoroutine(stunTime));
@@ -61,6 +77,18 @@ public class EnemyBaseClass : MonoBehaviour, IDamageable
                 Vector2 knockbackDirection = (transform.position - playerController.transform.position).normalized;
                 rb.AddForce(knockbackDirection * knockbackForce, ForceMode2D.Impulse);
             }
+        }
+    }
+
+    private IEnumerator PlayHitEffect()
+    {
+        if (!isHitFlashing)
+        {
+            isHitFlashing = true;
+            enemyMaterial.SetFloat("_StrongTintFade", 1);
+            yield return new WaitForSeconds(0.1f);
+            enemyMaterial.SetFloat("_StrongTintFade", 0);
+            isHitFlashing = false;
         }
     }
 

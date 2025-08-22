@@ -7,7 +7,6 @@ public class Sulker : EnemyBaseClass
     [Header("Movement Settings")]
     public float fleeDistance = 5f;
     public float acceleration = 15f;
-    
     private Transform playerTransform;
     private Rigidbody2D rb;
     public damageArea attackPrefab;
@@ -92,8 +91,7 @@ public class Sulker : EnemyBaseClass
         {
             attackPrefab.transform.position = transform.position;
             attackPrefab.transform.SetParent(null);
-            attackPrefab._enabled = true;
-            attackPrefab.damageEffect.Play();
+            attackPrefab.EnableDamage();
         }
         attackCooldown = attackTimer;
         lastPos = transform.position;

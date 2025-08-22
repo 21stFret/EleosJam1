@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.InputSystem;
@@ -38,10 +39,13 @@ public class GameManager : MonoBehaviour
     public ExorcistCombat _exorcistCombat;
     public ExorcistLeveling exorcistLeveling;
 
+    [HideInInspector]
     public float enemyWavetimer;
     public float enemyWaveTime;
 
     public GameUI gameUI;
+    public InputActionAsset inputActions;
+    private InputAction pauseAction;
 
     void Awake()
     {
@@ -50,6 +54,8 @@ public class GameManager : MonoBehaviour
         {
             Instance = this;
         }
+        pauseAction = inputActions.FindAction("Pause");
+        pauseAction.performed += HandlePauseGame;
 
         gameUI = GetComponent<GameUI>();
     }
@@ -67,37 +73,44 @@ public class GameManager : MonoBehaviour
         }
     }
 
-    private void Update()
+    void Update()
     {
-        // Handle input for pausing the game
-        if (Keyboard.current.escapeKey.wasPressedThisFrame)
-        {
-            if (gamePaused)
-            {
-                ResumeGame();
-                if (gameUI != null)
-                {
-                    gameUI.HidePauseMenu();
-                }
-            }
-            else
-            {
-                PauseGame();
-                if (gameUI != null)
-                {
-                    gameUI.ShowPauseMenu();
-                }
-            }
-        }
-
         if (gameStarted && !gamePaused)
         {
-            // Update game logic here if needed
             enemyWavetimer += Time.deltaTime;
             if (enemyWavetimer >= enemyWaveTime)
             {
+                StartCoroutine(SpawnEnemies());
                 enemyWavetimer = 0f;
-                SpawnAdditionalWave(enemiesPerWave);
+            }
+        }
+    }
+
+    public void HandlePauseGame(InputAction.CallbackContext context)
+    {
+        if (gamePaused)
+        {
+            if (!gameUI.pauseMenu.activeSelf)
+            {
+                return;
+            }
+            if (gameUI != null)
+            {
+                gameUI.HidePauseMenu();
+            }
+            if (gameUI.levelUpUI.activeSelf)
+            {
+                return; // Don't resume if level up UI is active
+            }
+            ResumeGame();
+
+        }
+        else
+        {
+            PauseGame();
+            if (gameUI != null)
+            {
+                gameUI.ShowPauseMenu();
             }
         }
     }

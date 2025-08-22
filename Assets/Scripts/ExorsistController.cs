@@ -219,7 +219,7 @@ public class ExorcistController : MonoBehaviour, IDamageable
         }
     }
     
-    void OnJump(InputAction.CallbackContext context)
+    public void OnJump(InputAction.CallbackContext context)
     {
         if (!context.performed)
             return;

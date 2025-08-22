@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.Rendering;
 
 public class Booky : EnemyBaseClass
 {
@@ -17,6 +18,10 @@ public class Booky : EnemyBaseClass
     private float lastJumpTime = -10f;
     private GameObject currentPlatform;
 
+    public BookyProjectile projectilePrefab;
+    public float projectileSpeed = 5f;
+    public float attackTimer = 5f;
+
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
@@ -32,6 +37,7 @@ public class Booky : EnemyBaseClass
         MoveAlongPlatform();
         CheckEdgeAndJump();
         CheckForWalls();
+        LaunchProjectile();
     }
 
     void MoveAlongPlatform()
@@ -46,6 +52,28 @@ public class Booky : EnemyBaseClass
         if (currentPlatform == null) return;
 
         rb.linearVelocity = new Vector2(direction * speed, rb.linearVelocity.y);
+    }
+
+    void LaunchProjectile()
+    {
+        attackCooldown -= Time.deltaTime;
+        if (attackCooldown <= 0)
+        {
+            if (projectilePrefab != null)
+            {
+                projectilePrefab.transform.position = transform.position;
+                projectilePrefab.transform.SetParent(null);
+                projectilePrefab.gameObject.SetActive(true);
+                projectilePrefab.lineRenderer.enabled = true;
+                Rigidbody2D rb = projectilePrefab.GetComponent<Rigidbody2D>();
+                if (rb != null)
+                {
+                    Vector2 launchDirection = movingRight ? Vector2.right : Vector2.left;
+                    rb.linearVelocity = launchDirection * projectileSpeed;
+                }
+            }
+            attackCooldown = attackTimer;
+        }
     }
 
     void CheckEdgeAndJump()
