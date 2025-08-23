@@ -10153,6 +10153,8 @@ MonoBehaviour:
   deathEffect: {fileID: 2185623006570362419}
   realityType: 0
   enemyRenderer: {fileID: 3778855928653064689}
+  SpawnNoise: {fileID: 8300000, guid: 78d7ed77b23c0ff4dbec01bd4c7f4c12, type: 3}
+  DeathNoise: {fileID: 8300000, guid: bd0f54fe56536ec45b0033d6e16bb422, type: 3}
   fleeDistance: 5
   acceleration: 100
   attackPrefab: {fileID: 5181934008847118642}

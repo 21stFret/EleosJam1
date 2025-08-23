@@ -5156,6 +5156,8 @@ MonoBehaviour:
   deathEffect: {fileID: 2185623006570362419}
   realityType: 0
   enemyRenderer: {fileID: 5653995427162115049}
+  SpawnNoise: {fileID: 8300000, guid: c56a5049505ecc54685336de4bdb447d, type: 3}
+  DeathNoise: {fileID: 8300000, guid: c56a5049505ecc54685336de4bdb447d, type: 3}
   chaseDistance: 30
 --- !u!96 &8832360577630290385
 TrailRenderer:

@@ -1,5 +1,6 @@
 using UnityEngine;
 using UnityEngine.Audio;
+using System.Collections.Generic;
 
 public class AudioManager : MonoBehaviour
 {
@@ -22,7 +23,10 @@ public class AudioManager : MonoBehaviour
 
     // Singleton instance
     public static AudioManager Instance { get; private set; }
-    
+
+    public List<AudioClip> musicClips;
+    public List<AudioClip> sfxClips;
+
     void Awake()
     {
         // Singleton pattern
@@ -106,7 +110,7 @@ public class AudioManager : MonoBehaviour
     
     #region Audio Playback Methods
     
-    public void PlayMusic(AudioClip clip, bool loop = true, float fadeInTime = 0f)
+    public void PlayMusic(AudioClip clip, bool loop = true, float fadeInTime = 1f)
     {
         if (musicSource != null && clip != null)
         {

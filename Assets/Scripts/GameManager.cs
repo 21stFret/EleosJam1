@@ -122,6 +122,7 @@ public class GameManager : MonoBehaviour
         gamePaused = false;
 
         Debug.Log("Game Started!");
+        AudioManager.Instance.PlayMusic(AudioManager.Instance.musicClips[1]);
         OnGameStart?.Invoke();
         Time.timeScale = 1f; // Ensure game is running at normal speed
         if (playerInput != null)
@@ -204,7 +205,7 @@ public class GameManager : MonoBehaviour
         {
             activeEnemies.Add(enemy);
             allSpawnedEnemies.Add(enemy);
-            enemy.StartingImmunity();
+            enemy.Spawn();
         }
     }
 

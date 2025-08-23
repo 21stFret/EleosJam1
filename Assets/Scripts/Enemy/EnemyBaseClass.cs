@@ -20,6 +20,7 @@ public class EnemyBaseClass : MonoBehaviour, IDamageable
     private bool isHitFlashing = false;
     private Material enemyMaterial;
     public Renderer enemyRenderer;
+    public AudioClip SpawnNoise, DeathNoise;
     private void Awake()
     {
         if (enemyRenderer != null)
@@ -33,10 +34,16 @@ public class EnemyBaseClass : MonoBehaviour, IDamageable
         }
     }
 
-    public void StartingImmunity()
+    public void Spawn()
     {
+        isAlive = true;
         isImmune = true;
         StartCoroutine(RemoveImmunity());
+
+        if (SpawnNoise != null)
+        {
+            AudioManager.Instance.PlaySFX(SpawnNoise);
+        }
     }
 
     private IEnumerator RemoveImmunity()
@@ -111,6 +118,11 @@ public class EnemyBaseClass : MonoBehaviour, IDamageable
             deathEffect.transform.parent = null; // Detach from parent to avoid being destroyed
             deathEffect.Play();
         }
+        
+        if (DeathNoise != null)
+        {
+            AudioManager.Instance.PlaySFX(DeathNoise);
+        }
 
         // Notify GameManager if it exists
         if (GameManager.Instance != null)
@@ -122,6 +134,8 @@ public class EnemyBaseClass : MonoBehaviour, IDamageable
 
         // Give exp to the player
         ExperienceManager.Instance.SpawnExperienceOrbs(transform.position, realityType);
+
+
     }
 
     public virtual void Update()

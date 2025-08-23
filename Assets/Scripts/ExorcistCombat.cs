@@ -49,6 +49,7 @@ public class ExorcistCombat : MonoBehaviour
     // Input System
     public InputActionAsset inputActions;
     private InputAction attackAction;
+    private InputAction aimAction;
     
     // Combat state
     private float lastMeleeAttackTime;
@@ -63,6 +64,8 @@ public class ExorcistCombat : MonoBehaviour
     private Queue<GameObject> projectilePool = new Queue<GameObject>();
     private Transform projectilePoolParent;
     private bool isInitialized;
+
+    public Vector2 lastAimDirection = Vector2.right;
 
     public void Init()
     {
@@ -88,6 +91,10 @@ public class ExorcistCombat : MonoBehaviour
             attackAction = inputActions.FindAction("Attack");
             if (attackAction != null)
                 attackAction.performed += OnAttack;
+
+            aimAction = inputActions.FindAction("Aim");
+            if (aimAction != null)
+                aimAction.performed += OnAim;
         }
 
         // Create fire point if it doesn't exist
@@ -155,7 +162,24 @@ public class ExorcistCombat : MonoBehaviour
             TryMeleeAttack();
         }
     }
-    
+
+    void OnAim(InputAction.CallbackContext context)
+    {
+        print("Aiming input is" + context.ReadValue<Vector2>());
+        // Handle aiming logic here
+        if (InputTracker.instance.usingMouse)
+        {
+            Vector2 worldPoint = Camera.main.ScreenToWorldPoint(context.ReadValue<Vector2>());
+            lastAimDirection = worldPoint - (Vector2)firePoint.position;
+            print("Mouse Aim Direction: " + lastAimDirection);
+        }
+        else
+        {
+            lastAimDirection = context.ReadValue<Vector2>();
+            print("Controller Aim Direction: " + lastAimDirection);
+        }
+    }
+
     void TryMeleeAttack()
     {
         if (Time.time - lastMeleeAttackTime < meleeCooldown) return;
@@ -213,7 +237,7 @@ public class ExorcistCombat : MonoBehaviour
         }
 
         // Set projectile direction based on mouse position
-        Vector2 shootDirection = (Camera.main.ScreenToWorldPoint(Mouse.current.position.ReadValue()) - firePoint.position).normalized;
+        Vector2 shootDirection = lastAimDirection;
         
         for (int i = 0; i < projectileAmount; i++)
         {
@@ -262,7 +286,7 @@ public class ExorcistCombat : MonoBehaviour
     {
         if (meleeHitbox != null)
         {
-            Vector2 meleeDirection = (Camera.main.ScreenToWorldPoint(Mouse.current.position.ReadValue()) - transform.position).normalized;
+            Vector2 meleeDirection = lastAimDirection;
             meleeHitbox.gameObject.transform.position = transform.position + (Vector3)meleeDirection.normalized  * meleeOffset;
             meleeHitbox.gameObject.transform.rotation = Quaternion.LookRotation(meleeHitbox.gameObject.transform.forward, meleeDirection);
             meleeHitbox.gameObject.SetActive(enable);

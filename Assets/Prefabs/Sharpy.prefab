@@ -582,6 +582,8 @@ MonoBehaviour:
   deathEffect: {fileID: 0}
   realityType: 1
   enemyRenderer: {fileID: 5434575176851103989}
+  SpawnNoise: {fileID: 8300000, guid: 16d5c0aded1735c48a87342d1f043173, type: 3}
+  DeathNoise: {fileID: 8300000, guid: 16d5c0aded1735c48a87342d1f043173, type: 3}
   edgeRayDistance: 1.2
   jumpForce: 8
   wallLayer:

@@ -22,8 +22,9 @@ public class MeleeHitbox : MonoBehaviour
         stunTime = combat.stunTime;
         knockbackForce = combat.meleeKnockbackForce;
         hitboxCollider = combat.meleeCollider;
-        sR.transform.localScale = new Vector3(sR.transform.localScale.x, combat.meleeRange * scaleEffector, 1);
-        //sR.transform.localPosition = new Vector3(hitboxCollider.offset.x, hitboxCollider.offset.y, 0);
+        hitboxCollider.size = new Vector2(combat.meleeRange, combat.meleeRange);
+        sR.transform.localScale = new Vector3(combat.meleeRange * scaleEffector, combat.meleeRange * scaleEffector, 1);
+        sR.transform.localPosition = new Vector3(0, hitboxCollider.offset.y, 0);
     }
 
     void OnEnable()
