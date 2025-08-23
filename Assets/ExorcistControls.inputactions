@@ -52,7 +52,7 @@
                 },
                 {
                     "name": "Aim",
-                    "type": "Value",
+                    "type": "PassThrough",
                     "id": "a97987a9-11c9-4767-b9ec-4bc950b7849f",
                     "expectedControlType": "Vector2",
                     "processors": "",
