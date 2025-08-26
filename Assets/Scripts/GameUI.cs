@@ -2,6 +2,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
 using Unity.VisualScripting;
+using UnityEngine.EventSystems;
 
 public class GameUI : MonoBehaviour
 {
@@ -16,7 +17,8 @@ public class GameUI : MonoBehaviour
     public GameObject winPanel;
     public GameObject gameHUD;
     public GameObject pauseMenu;
-    
+    public EventSystem eventSystem;
+
     [Header("Settings")]
     public int additionalWaveSize = 3;
 
@@ -34,7 +36,9 @@ public class GameUI : MonoBehaviour
     public int currentMinimapScale;
 
     public GameObject levelUpUI;
-
+    public GameObject highlightedPauseButton;
+    public GameObject highleightedStartButton;
+    public GameObject retryButton;
 
     void Start()
     {
@@ -73,7 +77,10 @@ public class GameUI : MonoBehaviour
         if (startgamePanel != null)
             startgamePanel.SetActive(false);
         if (pauseMenu != null)
+        {
             pauseMenu.SetActive(true);
+            eventSystem.SetSelectedGameObject(highlightedPauseButton);
+        }
         
         Debug.Log("UI: Pause Menu Shown");
     }
@@ -268,8 +275,25 @@ public class GameUI : MonoBehaviour
         {
             winText.text = "Exorcist Defeated!";
         }
+        eventSystem.SetSelectedGameObject(retryButton);
 
         Debug.Log("UI: Game Won!");
+    }
+
+    public void SetOptionsButtonSelected()
+    {
+        if (eventSystem != null && highlightedPauseButton != null)
+        {
+            eventSystem.SetSelectedGameObject(highlightedPauseButton);
+        }
+    }
+
+    public void SetStartButtonSelected()
+    {
+        if (eventSystem != null && highleightedStartButton != null)
+        {
+            eventSystem.SetSelectedGameObject(highleightedStartButton);
+        }
     }
 
     public void UpdateHealthBar(float healthPercentage)
