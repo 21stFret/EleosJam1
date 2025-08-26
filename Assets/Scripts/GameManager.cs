@@ -44,6 +44,7 @@ public class GameManager : MonoBehaviour
     public float enemyWaveTime;
 
     public GameUI gameUI;
+    public CursorIcon cursorIcon;
     public InputActionAsset inputActions;
     private InputAction pauseAction;
 
@@ -83,6 +84,7 @@ public class GameManager : MonoBehaviour
                 StartCoroutine(SpawnEnemies());
                 enemyWavetimer = 0f;
             }
+            //cursorIcon.UpdateCursor(Input.mousePosition);
         }
     }
 

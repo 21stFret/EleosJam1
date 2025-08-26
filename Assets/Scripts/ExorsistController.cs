@@ -51,6 +51,7 @@ public class ExorcistController : MonoBehaviour, IDamageable
     private float verticalInput;
     private bool isGrounded;
     private bool wasGrounded;
+    private bool canTakeDamage;
     private float coyoteTimeCounter;
     private float jumpBufferCounter;
     private bool isTouchingWall;
@@ -126,6 +127,7 @@ public class ExorcistController : MonoBehaviour, IDamageable
         if (!wasGrounded && isGrounded)
         {
             // Player just landed
+            canTakeDamage = true;
         }
     }
     

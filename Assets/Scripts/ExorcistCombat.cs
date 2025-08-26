@@ -51,6 +51,7 @@ public class ExorcistCombat : MonoBehaviour
     private InputAction attackAction;
     private InputAction aimAction;
     
+    
     // Combat state
     private float lastMeleeAttackTime;
     private float lastRangedAttackTime;
@@ -101,13 +102,14 @@ public class ExorcistCombat : MonoBehaviour
         if (firePoint == null)
         {
             GameObject firePointObj = new GameObject("FirePoint");
+            Debug.Log("Creared firpoint: " + firePointObj);
             firePointObj.transform.SetParent(transform);
             firePointObj.transform.localPosition = new Vector3(0.5f, 0, 0);
             firePoint = firePointObj.transform;
         }
 
-        // Initialize projectile pool
-        InitializeProjectilePool();
+            // Initialize projectile pool
+            InitializeProjectilePool();
 
         meleeCollider = meleeHitbox.GetComponent<BoxCollider2D>();
         meleeHitbox.Initialize(this);
@@ -170,6 +172,7 @@ public class ExorcistCombat : MonoBehaviour
         if (InputTracker.instance.usingMouse)
         {
             Vector2 worldPoint = Camera.main.ScreenToWorldPoint(context.ReadValue<Vector2>());
+            //Debug.Log("mouse direction: " + lastAimDirection + " firepoint: " + (Vector2)firePoint.position);
             lastAimDirection = worldPoint - (Vector2)firePoint.position;
             print("Mouse Aim Direction: " + lastAimDirection);
         }
